@@ -24,7 +24,7 @@
   <nav class="main-nav" id="mainNav">
     <a href="index.html">Inicio</a>
     <a href="lugares.html">Lugares</a>
-    <a href="circuito.html">Circuito</a>
+    <a href="circuito.html">12 Treks</a>
     <a href="ranking.html">Ranking</a>
     <a href="competencia.html" class="nav-cta">Competir →</a>
   </nav>
@@ -51,31 +51,6 @@
     <div id="rankLocal">
 
     <div class="board reveal mb-2">
-      <div class="board-head"><h3>🏆 Circuito completo · más rápido</h3><span class="tag">Oficial</span></div>
-      <table>
-        <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
-        <tbody id="boardFull"></tbody>
-      </table>
-    </div>
-
-    <div class="board reveal mb-2">
-      <div class="board-head"><h3>⚡ Récord por checkpoint</h3><span class="tag">Parciales</span></div>
-      <table>
-        <thead><tr><th>#</th><th>Checkpoint</th><th>Mejor parcial</th><th>Trekker</th></tr></thead>
-        <tbody id="boardCps"></tbody>
-      </table>
-    </div>
-
-    <div class="board reveal mb-2">
-      <div class="board-head"><h3>👑 Conquistadores totales</h3><span class="tag">12/12</span></div>
-      <table>
-        <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
-        <tbody id="boardConq"></tbody>
-      </table>
-      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">Solo entran quienes completaron los 12 checkpoints en un mismo intento. El resto, a entrenar.</p>
-    </div>
-
-    <div class="board reveal mb-2">
       <div class="board-head"><h3>⏱ Trek cronometrado por lugar</h3><span class="tag">Desde la comunidad</span></div>
       <div style="padding:1.1rem 1.4rem 0;">
         <select id="selCronoPlace" aria-label="Lugar del trek" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
@@ -89,15 +64,6 @@
     </div><!-- /rankLocal -->
 
     <div id="rankGlobal" hidden>
-      <div class="board reveal mb-2">
-        <div class="board-head"><h3>🌐 Circuito completo · global</h3><span class="tag">Todo el Perú</span></div>
-        <table>
-          <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th><th></th></tr></thead>
-          <tbody id="boardGlobalFull"></tbody>
-        </table>
-        <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);" id="globalFullNote"></p>
-      </div>
-
       <div class="board reveal mb-2">
         <div class="board-head"><h3>🌐 Trek cronometrado por lugar · global</h3><span class="tag">Todo el Perú</span></div>
         <div style="padding:1.1rem 1.4rem 0;">
@@ -129,7 +95,7 @@
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
-        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">12 Treks</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
@@ -138,7 +104,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.12</span>
+      <span>Temporada 01 · v2.13</span>
     </div>
   </div>
 </footer>
@@ -149,39 +115,6 @@
 <script src="assets/js/global.js"></script>
 <script>
 (function () {
-  const demo = r => r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : '';
-
-  const full = TRPRanking.all();
-  document.getElementById("boardFull").innerHTML = full.length
-    ? full.map((r, i) => `<tr class="rank-${i + 1}">
-        <td><span class="pos">${i + 1}</span></td>
-        <td><strong>${TRPEscape(r.runner)}</strong>${demo(r)}</td>
-        <td class="mono"><strong>${TRP.formatMs(r.totalMs)}</strong></td>
-        <td class="mono">${r.date || "—"}</td>
-      </tr>`).join("")
-    : `<tr><td colspan="4" class="center" style="padding:2rem;">Nadie ha terminado aún. <a href="competencia.html">Sé el primero →</a></td></tr>`;
-
-  const best = TRPRanking.bestByCheckpoint();
-  document.getElementById("boardCps").innerHTML = TRP.checkpoints().map((p, i) => {
-    const b = best[p.slug];
-    return `<tr>
-      <td><span class="pos" style="font-size:1rem;">${i + 1}</span></td>
-      <td><a href="lugar.html?id=${p.slug}" style="color:inherit;">${p.nombre}</a></td>
-      <td class="mono"><strong>${b ? TRP.formatMsShort(b.ms) : "—"}</strong></td>
-      <td>${b ? TRPEscape(b.runner) : '<span style="color:#999;">Vacante</span>'}</td>
-    </tr>`;
-  }).join("");
-
-  const conq = TRPRanking.conquistadores();
-  document.getElementById("boardConq").innerHTML = conq.length
-    ? conq.map((r, i) => `<tr class="rank-${i + 1}">
-        <td><span class="pos">${i + 1}</span></td>
-        <td><strong>${TRPEscape(r.runner)}</strong>${demo(r)}</td>
-        <td class="mono"><strong>${TRP.formatMs(r.totalMs)}</strong></td>
-        <td class="mono">${r.date || "—"}</td>
-      </tr>`).join("")
-    : `<tr><td colspan="4" class="center" style="padding:2rem;">La lista sagrada está vacía. Todavía.</td></tr>`;
-
   document.getElementById("btnWipe").addEventListener("click", () => {
     if (confirm("¿Borrar tus tiempos guardados en este dispositivo?")) {
       TRPRanking.clearMine();
@@ -211,7 +144,7 @@
   const tabLocal = document.getElementById("tabLocal");
   const tabGlobal = document.getElementById("tabGlobal");
   let globalLoaded = false;
-  let lastCircuitRows = [], lastCronoRows = [];
+  let lastCronoRows = [];
   function setTab(g) {
     document.getElementById("rankLocal").hidden = g;
     document.getElementById("rankGlobal").hidden = !g;
@@ -231,18 +164,16 @@
   async function onReportClick(e) {
     const b = e.target.closest("[data-rep]");
     if (!b) return;
-    const [tabla, idx] = b.dataset.rep.split(":");
-    const rows = tabla === "crono" ? lastCronoRows : lastCircuitRows;
-    const r = rows[Number(idx)];
+    const r = lastCronoRows[Number(b.dataset.rep.split(":")[1])];
     if (!r) return;
     const reason = prompt(`Reportar el tiempo de "${r.runner}" como sospechoso.\nMotivo (opcional):`, "");
     if (reason === null) return; // canceló
     b.disabled = true;
     try {
       await TRPGlobal.report({
-        tabla, runner: r.runner,
-        refMs: tabla === "crono" ? r.ms : r.total_ms,
-        slug: tabla === "crono" ? document.getElementById("selGlobalCrono").value : null,
+        tabla: "crono", runner: r.runner,
+        refMs: r.ms,
+        slug: document.getElementById("selGlobalCrono").value,
         reason
       });
       TRPToast.show("🚩 Reporte enviado. Lo revisaremos.");
@@ -251,41 +182,15 @@
       TRPToast.show("No se pudo enviar el reporte. Revisa tu conexión.");
     }
   }
-  document.getElementById("boardGlobalFull").addEventListener("click", onReportClick);
   document.getElementById("boardGlobalCrono").addEventListener("click", onReportClick);
 
   async function loadGlobal() {
-    const note1 = document.getElementById("globalFullNote");
-    const demoTag = r => r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : "";
-    const verdictTag = r => r.verdict === "ok"
-      ? ' <span class="tag" style="font-size:.6rem;background:var(--acid);">✓ GPS</span>'
-      : (r.verdict === "revisar" ? ' <span class="tag" style="font-size:.6rem;background:#ffb703;">revisión</span>' : "");
     if (!TRPGlobal.configured()) {
-      document.getElementById("boardGlobalFull").innerHTML =
-        `<tr><td colspan="4" class="center" style="padding:2rem;">El ranking global se activa pronto. Tus tiempos locales siguen guardados en tu dispositivo.</td></tr>`;
       document.getElementById("boardGlobalCrono").innerHTML =
         `<tr><td colspan="4" class="center" style="padding:2rem;">El ranking global se activa pronto.</td></tr>`;
-      note1.textContent = "Próximamente: una sola tabla para todo el Perú.";
       document.getElementById("globalCronoNote").textContent = "";
       globalLoaded = true;
       return;
-    }
-    try {
-      const rows = await TRPGlobal.circuitBoard();
-      lastCircuitRows = rows;
-      document.getElementById("boardGlobalFull").innerHTML = rows.length
-        ? rows.map((r, i) => `<tr class="rank-${i + 1}">
-            <td><span class="pos">${i + 1}</span></td>
-            <td><strong>${TRPEscape(r.runner)}</strong>${demoTag(r)}${verdictTag(r)}</td>
-            <td class="mono"><strong>${TRP.formatMs(r.total_ms)}</strong></td>
-            <td class="mono">${r.date || "—"}</td>
-            <td><button class="btn btn-ghost btn-small" data-rep="circuit:${i}" title="Reportar tiempo sospechoso" style="padding:.2rem .5rem;">🚩</button></td></tr>`).join("")
-        : `<tr><td colspan="5" class="center" style="padding:2rem;">Nadie ha publicado todavía. <a href="competencia.html">Sé el primero →</a></td></tr>`;
-      note1.textContent = `Tabla global en vivo · ${rows.length} tiempos publicados.`;
-    } catch (e) {
-      document.getElementById("boardGlobalFull").innerHTML =
-        `<tr><td colspan="4" class="center" style="padding:2rem;">No se pudo cargar la tabla global. Revisa tu conexión.</td></tr>`;
-      note1.textContent = "";
     }
     await renderGlobalCrono();
     globalLoaded = true;

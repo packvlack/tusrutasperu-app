@@ -24,7 +24,7 @@
   <nav class="main-nav" id="mainNav">
     <a href="index.html">Inicio</a>
     <a href="lugares.html">Lugares</a>
-    <a href="circuito.html">Circuito</a>
+    <a href="circuito.html">12 Treks</a>
     <a href="ranking.html">Ranking</a>
     <a href="competencia.html" class="nav-cta">Competir →</a>
   </nav>
@@ -92,7 +92,7 @@
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
-        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">12 Treks</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
@@ -101,7 +101,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.12</span>
+      <span>Temporada 01 · v2.13</span>
     </div>
   </div>
 </footer>
@@ -128,7 +128,7 @@
     return `
     <li class="etapa reveal ${p.esMeta ? "meta" : ""}">
       <div class="etapa-num">${d ? "✔" : String(i + 1).padStart(2, "0")}</div>
-      <a class="etapa-card" href="lugar.html?id=${p.slug}">
+      <div class="etapa-card" data-goto="lugar.html?id=${p.slug}" role="link" tabindex="0" style="cursor:pointer">
         <div class="thumb"><img src="${p.img}" alt="${p.alt || p.nombre}" loading="lazy"></div>
         <div class="einfo">
           <h3>${p.nombre}</h3>
@@ -140,9 +140,20 @@
           </div>
           ${d ? "" : `<p class="mono mt-2" style="font-size:.78rem;"><a href="competencia.html?modo=trek&lugar=${p.slug}">Trekkea este lugar →</a></p>`}
         </div>
-      </a>
+      </div>
     </li>`;
   }).join("");
+  tl.addEventListener("click", e => {
+    if (e.target.closest("a")) return;
+    const card = e.target.closest(".etapa-card[data-goto]");
+    if (card) location.href = card.dataset.goto;
+  });
+  tl.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("etapa-card")) {
+      e.preventDefault();
+      location.href = e.target.dataset.goto;
+    }
+  });
   tl.querySelectorAll(".reveal").forEach(el => io.observe(el));
 })();
 </script>

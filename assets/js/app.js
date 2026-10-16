@@ -160,6 +160,7 @@
     clearMine() {
       try { localStorage.removeItem(KEY); } catch (e) {}
       try { localStorage.removeItem(CRONO_KEY); } catch (e) {}
+      try { localStorage.removeItem(TREKS_KEY); } catch (e) {}
     },
     bestByCheckpoint() {
       const best = {};

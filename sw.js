@@ -3,7 +3,7 @@
    La app funciona sin conexión: el armazón se pre-cachea,
    las fotos/videos se cachean al usarse.
    ============================================================ */
-const CACHE = "trp-v2.12";
+const CACHE = "trp-v2.13";
 
 const SHELL = [
   "./",
