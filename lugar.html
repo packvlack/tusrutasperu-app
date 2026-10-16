@@ -51,7 +51,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.10</span>
+      <span>Temporada 01 · v2.11</span>
     </div>
   </div>
 </footer>
@@ -144,9 +144,21 @@
       </div>
 
       <div class="center mt-3">
-        <div class="split" style="justify-content:center;">
-          <a href="competencia.html" class="btn btn-dark btn-big">▶ Circuito 12 checkpoints</a>
-          <a href="competencia.html?modo=crono&lugar=${p.slug}" class="btn btn-primary btn-big">⏱ Contrarreloj desde ${p.partida.nombre}</a>
+        <h2 class="display-sm mb-2">¿Cómo lo corres?</h2>
+        <p class="mono mb-2" style="font-size:.85rem;color:#555;">Son dos competencias distintas: la contrarreloj <strong>no</strong> marca el checkpoint del circuito.</p>
+        <div class="split" style="justify-content:center;align-items:stretch;">
+          <div class="card" style="max-width:360px;text-align:left;">
+            <div class="card-body">
+              <a href="competencia.html?modo=crono&lugar=${p.slug}" class="btn btn-primary btn-big" style="width:100%;justify-content:center;">⏱ Contrarreloj</a>
+              <p class="mono mt-2" style="font-size:.8rem;color:#555;">Solo este lugar, contra el reloj, partiendo de <strong>${p.partida.nombre}</strong>. Tu tiempo entra al ranking de contrarreloj.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:360px;text-align:left;">
+            <div class="card-body">
+              <a href="competencia.html" class="btn btn-dark btn-big" style="width:100%;justify-content:center;">▶ Circuito 12 checkpoints</a>
+              <p class="mono mt-2" style="font-size:.8rem;color:#555;">El circuito completo desde Huaral: este lugar cuenta como uno de tus 12 checkpoints.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
