@@ -84,7 +84,7 @@
 
     let y = 880;
     // etiqueta de modo
-    const tag = d.mode === "crono" ? "⏱ CONTRARRELOJ" : "🏁 CIRCUITO · 12 CHECKPOINTS";
+    const tag = d.mode === "crono" ? "⏱ TREK CRONOMETRADO" : "🏁 CIRCUITO · 12 CHECKPOINTS";
     x.font = `40px ${MONO}`;
     const tw = x.measureText(tag).width + 70;
     x.fillStyle = ACID;
@@ -144,7 +144,7 @@
     x.strokeRect(W / 2 - bw / 2, y, bw, bh);
     x.fillStyle = DIM;
     x.font = `30px ${MONO}`;
-    x.fillText("CORREDOR", W / 2, y + 44);
+    x.fillText("TREKKER", W / 2, y + 44);
     x.fillStyle = PAPER;
     fitFont(x, (d.runner || "").toUpperCase(), bw - 80, 64, DISPLAY);
     x.fillText((d.runner || "").toUpperCase(), W / 2, y + 104);

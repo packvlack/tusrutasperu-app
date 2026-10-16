@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Competencia — TUSRUTASPERU</title>
-<meta name="description" content="Activa tu GPS y compite: circuito de 12 checkpoints desde Huaral o contrarreloj por lugar desde su comunidad.">
+<meta name="description" content="Trekkea los 12 lugares de Huaral: activa tu GPS, cronometra tu trek desde su comunidad y marca tu checkpoint.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d8ff00">
 <meta name="mobile-web-app-capable" content="yes">
@@ -36,75 +36,17 @@
   <div class="wrap">
     <span class="kicker mono tag" style="background:var(--blood);color:#fff;">◈ Zona de competencia</span>
     <h1 class="display-lg mt-2">TU GPS.<br>TU TIEMPO.<br><span class="text-blood">TU LEYENDA.</span></h1>
-    <p class="lead">Dos modos: el circuito de 12 checkpoints desde Huaral, o la contrarreloj de cada lugar con partida en su comunidad. Activa tu GPS y corre.</p>
+    <p class="lead">12 treks de altura, cada uno con partida en su comunidad. Elige tu lugar, activa tu GPS y trekkea: completar un trek marca su checkpoint.</p>
   </div>
 </section>
 
-<div class="wrap" style="max-width:1000px;padding-top:2.5rem;">
-  <div class="split" role="tablist" aria-label="Modo de competencia" style="gap:.8rem;justify-content:flex-start;">
-    <button class="btn btn-dark mode-tab" id="tabCircuito">🏁 Circuito · 12 checkpoints</button>
-    <button class="btn mode-tab" id="tabCrono">⏱ Contrarreloj por lugar</button>
-  </div>
-</div>
-
-<div id="modeCircuito">
 <section class="section" style="padding-top:3rem;">
   <div class="wrap" style="max-width:1000px;">
 
-    <!-- PASO 1: CORREDOR -->
-    <div class="gps-panel reveal mb-2" id="panelRunner">
-      <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;">Paso 01 · Identifícate, corredor</p>
-      <div class="field" style="margin-bottom:0;">
-        <label for="runnerName">Nombre de corredor</label>
-        <div class="split">
-          <input id="runnerName" type="text" maxlength="16" placeholder="Ej: CHASQUI·47" style="flex:1;min-width:220px;text-transform:uppercase;">
-          <button class="btn btn-dark" id="btnRunner">Fijar nombre</button>
-        </div>
-        <p class="mono mt-2" style="font-size:.75rem;color:#666;">Máx. 16 caracteres. Será tu firma en el ranking.</p>
-      </div>
-      <p class="mt-2" id="runnerEcho" style="display:none;">Corriendo como: <span class="runner-tag" id="runnerTag"></span>
-        <button class="btn btn-ghost btn-small" id="btnChangeRunner" style="display:none;margin-left:.6rem;">Cambiar</button></p>
+    <div class="gps-panel reveal mb-2" style="display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+      <p class="mono" style="font-size:.85rem;">🏔 Cada trek completado marca su checkpoint.</p>
+      <a href="circuito.html" class="btn btn-dark btn-small">Ver mis 12 treks →</a>
     </div>
-
-    <!-- PASO 2: GPS -->
-    <div class="gps-panel reveal mb-2" id="panelGps" style="opacity:.55;">
-      <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;">Paso 02 · Activa tu GPS</p>
-      <div class="gps-row"><span><span class="gps-dot" id="dotGps"></span> Estado del GPS</span><strong id="gpsStatus">Apagado</strong></div>
-      <div class="gps-row"><span>Tu posición</span><strong id="gpsCoords" class="mono">—</strong></div>
-      <div class="gps-row"><span>Precisión</span><strong id="gpsAcc" class="mono">—</strong></div>
-      <div class="gps-row"><span>Distancia a Huaral (partida)</span><strong id="gpsDist" class="mono">—</strong></div>
-      <div class="split mt-2">
-        <button class="btn btn-primary" id="btnGps">📡 Activar GPS</button>
-        <button class="btn btn-ghost btn-small" id="btnDemoStart" title="Para probar la app sin estar en Huaral">Modo demo: simular partida en Huaral</button>
-      </div>
-      <p class="mono mt-2" style="font-size:.75rem;color:#666;">La app verifica que estés dentro de la ciudad de Huaral para arrancar. Tus coordenadas nunca salen de tu dispositivo.</p>
-    </div>
-
-    <!-- PASO 3: CRONÓMETRO -->
-    <div class="chrono reveal" id="panelChrono" style="opacity:.55;">
-      <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;color:#888;">Paso 03 · Corre el circuito</p>
-      <span class="chrono-status" id="chronoStatus">En espera</span>
-      <div class="chrono-time" id="chronoTime">00:00:00</div>
-      <p class="mono mt-2" style="font-size:.8rem;color:#888;" id="chronoSub">El cronómetro arranca en la Plaza de Armas de Huaral.</p>
-      <p class="mono mt-2" id="trackLive" style="font-size:.85rem;">📏 — · ⛰️ —</p>
-      <div class="chrono-controls">
-        <button class="btn btn-primary btn-big" id="btnStart" disabled>🏁 Iniciar desde Huaral</button>
-        <button class="btn btn-danger" id="btnAbort" disabled>✕ Abandonar</button>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-        <span class="progress-label" id="progressLabel">0 de 12 checkpoints</span>
-      </div>
-      <ol class="checkpoint-list" id="cpList"></ol>
-    </div>
-
-  </div>
-</section>
-</div><!-- /modeCircuito -->
-
-<div id="modeCrono" hidden>
-<section class="section" style="padding-top:3rem;">
-  <div class="wrap" style="max-width:1000px;">
 
     <!-- CR PASO 1: LUGAR -->
     <div class="gps-panel reveal mb-2">
@@ -113,17 +55,17 @@
       <p class="mono mt-2" style="font-size:.75rem;color:#666;" id="crPlaceHint">Toca un lugar para ver su punto de partida.</p>
     </div>
 
-    <!-- CR PASO 2: CORREDOR + GPS -->
+    <!-- CR PASO 2: TREKKER + GPS -->
     <div class="gps-panel reveal mb-2" id="crPanelGps" style="opacity:.55;">
       <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;">Paso 02 · Identifícate y activa tu GPS</p>
       <div class="field" style="margin-bottom:1rem;">
-        <label for="crRunnerName">Nombre de corredor</label>
+        <label for="crRunnerName">Nombre de trekker</label>
         <div class="split">
           <input id="crRunnerName" type="text" maxlength="16" placeholder="Ej: CHASQUI·47" style="flex:1;min-width:220px;text-transform:uppercase;">
           <button class="btn btn-dark" id="crBtnRunner">Fijar nombre</button>
         </div>
       </div>
-      <p class="mt-2" id="crRunnerEcho" style="display:none;">Corriendo como: <span class="runner-tag" id="crRunnerTag"></span></p>
+      <p class="mt-2" id="crRunnerEcho" style="display:none;">Trekkeando como: <span class="runner-tag" id="crRunnerTag"></span></p>
       <div class="gps-row"><span>Punto de partida</span><strong id="crStartName">—</strong></div>
       <div class="gps-row"><span><span class="gps-dot" id="crDotGps"></span> Estado del GPS</span><strong id="crGpsStatus">Apagado</strong></div>
       <div class="gps-row"><span>Distancia a la partida</span><strong id="crGpsDist" class="mono">—</strong></div>
@@ -137,7 +79,7 @@
 
     <!-- CR PASO 3: CRONÓMETRO -->
     <div class="chrono reveal" id="crPanelChrono" style="opacity:.55;">
-      <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;color:#888;">Paso 03 · Corre la contrarreloj</p>
+      <p class="mono" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;color:#888;">Paso 03 · Trekkea tu trek</p>
       <span class="chrono-status" id="crChronoStatus">En espera</span>
       <div class="chrono-time" id="crChronoTime">00:00:00</div>
       <p class="mono mt-2" style="font-size:.8rem;color:#888;" id="crChronoSub">Elige un lugar y acércate a su comunidad.</p>
@@ -148,20 +90,20 @@
         <button class="btn btn-ghost" id="crBtnAbort" disabled>✕ Abandonar</button>
       </div>
       <div class="board mt-3">
-        <div class="board-head"><h3>⏱ Mejores tiempos · <span id="crBoardPlace">—</span></h3><span class="tag">Contrarreloj</span></div>
+        <div class="board-head"><h3>⏱ Mejores tiempos · <span id="crBoardPlace">—</span></h3><span class="tag">Trek cronometrado</span></div>
         <table><tbody id="crBoard"></tbody></table>
       </div>
     </div>
 
   </div>
 </section>
-</div><!-- /modeCrono -->
 
-<!-- MODAL REANUDAR CONTRARRELOJ -->
+
+<!-- MODAL REANUDAR TREK -->
 <div class="modal-backdrop" id="modalResumeCrono">
   <div class="modal center" role="dialog" aria-modal="true" aria-labelledby="crResumeTitle">
-    <span class="stamp acid">Contrarreloj en curso</span>
-    <h2 class="display-sm mt-2" id="crResumeTitle">TIENES UNA<br>CONTRARRELOJ ABIERTA</h2>
+    <span class="stamp acid">Trek en curso</span>
+    <h2 class="display-sm mt-2" id="crResumeTitle">TIENES UNA<br>TREK ABIERTO</h2>
     <p class="lead mt-2" style="font-size:1rem;" id="crResumeInfo"></p>
     <p class="mono mt-2" style="font-size:.8rem;color:#555;">El cronómetro siguió corriendo mientras estabas fuera. Así son las carreras de expedición.</p>
     <div class="split mt-3" style="justify-content:center;">
@@ -193,18 +135,6 @@
   </div>
 </div>
 
-<!-- MODAL REANUDAR CARRERA -->
-<div class="modal-backdrop" id="modalResume">
-  <div class="modal center" role="dialog" aria-modal="true" aria-labelledby="resumeTitle">
-    <span class="stamp acid">Carrera en curso</span>
-    <h2 class="display-sm mt-2" id="resumeTitle">TIENES UNA<br>CARRERA ABIERTA</h2>
-    <p class="lead mt-2" style="font-size:1rem;" id="resumeInfo"></p>
-    <p class="mono mt-2" style="font-size:.8rem;color:#555;">El cronómetro siguió corriendo mientras estabas fuera. Así son las carreras de expedición.</p>
-    <div class="split mt-3" style="justify-content:center;">
-      <button class="btn btn-primary" id="btnResume">▶ Reanudar carrera</button>
-      <button class="btn btn-ghost" id="btnDiscard">Descartar</button>
-    </div>
-  </div>
 </div>
 
 <footer class="site-footer">
@@ -225,7 +155,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.11</span>
+      <span>Temporada 01 · v2.12</span>
     </div>
   </div>
 </footer>
@@ -233,7 +163,6 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/track.js"></script>
-<script src="assets/js/competencia.js"></script>
 <script src="assets/js/contrarreloj.js"></script>
 <script src="assets/js/share.js"></script>
 <script src="assets/js/config.js"></script>

@@ -1,9 +1,9 @@
 /* ============================================================
-   TUSRUTASPERU — CONTRARRELOJ.JS (v1.2)
-   Modo "Contrarreloj por lugar": el cronómetro arranca en la
+   TUSRUTASPERU — TREK.JS (v2.12)
+   Modo "Trek cronometrado por lugar": el cronómetro arranca en la
    comunidad de partida de cada lugar (geocerca GPS) y se detiene
    en el lugar. Tiempos por lugar en ranking local.
-   La contrarreloj persiste en localStorage: sobrevive a recargas.
+   El trek persiste en localStorage: sobrevive a recargas.
    ============================================================ */
 (function () {
   "use strict";
@@ -32,18 +32,25 @@
 
   /* ---------- Modo: pestañas ---------- */
   const params = new URLSearchParams(location.search);
-  const isCrono = params.get("modo") === "crono";
+  const modoParam = params.get("modo");
+  /* v2.12: el modo es "trek" (se acepta "crono" como alias de enlaces viejos).
+     Sin pestañas: esta página es solo trek cronometrado. */
+  const isCrono = modoParam === "trek" || modoParam === "crono" || !modoParam;
 
   function setModeUI() {
-    $("modeCircuito").hidden = isCrono;
-    $("modeCrono").hidden = !isCrono;
-    $("tabCircuito").classList.toggle("btn-dark", !isCrono);
-    $("tabCrono").classList.toggle("btn-dark", isCrono);
+    /* v2.12: sin pestañas; si los elementos existen (compat), se ajustan. */
+    const mc = $("modeCircuito"), mt = $("modeCrono");
+    const tc = $("tabCircuito"), tt = $("tabCrono");
+    if (mc) mc.hidden = isCrono;
+    if (mt) mt.hidden = !isCrono;
+    if (tc) tc.classList.toggle("btn-dark", !isCrono);
+    if (tt) tt.classList.toggle("btn-dark", isCrono);
   }
-  $("tabCircuito").addEventListener("click", () => { if (isCrono) location.href = "competencia.html"; });
-  $("tabCrono").addEventListener("click", () => { if (!isCrono) location.href = "competencia.html?modo=crono"; });
+  const _tc = $("tabCircuito"), _tt = $("tabCrono");
+  if (_tc) _tc.addEventListener("click", () => { if (isCrono) location.href = "competencia.html"; });
+  if (_tt) _tt.addEventListener("click", () => { if (!isCrono) location.href = "competencia.html?modo=trek"; });
   setModeUI();
-  if (!isCrono) return; // el resto solo vive en modo crono
+  if (!isCrono) return; // el resto solo vive en modo trek
 
   /* ---------- Persistencia ---------- */
   function saveRace() {
@@ -76,7 +83,7 @@
   }
 
   function selectPlace(slug, silent) {
-    if (state.racing) { TRPToast.show("Termina o abandona la contrarreloj actual primero."); return; }
+    if (state.racing) { TRPToast.show("Termina o abandona el trek actual primero."); return; }
     const p = TRP.place(slug);
     if (!p) return;
     state.slug = slug;
@@ -226,7 +233,7 @@
 
   /* ---------- Arrancar / terminar / abandonar ---------- */
   function startRace() {
-    if (!state.runner) { TRPToast.show("Primero fija tu nombre de corredor."); return; }
+    if (!state.runner) { TRPToast.show("Primero fija tu nombre de trekker."); return; }
     if (!state.place) { TRPToast.show("Elige un lugar primero."); return; }
     state.racing = true;
     state.finished = false;
@@ -261,6 +268,14 @@
       runner: state.runner, slug: p.slug, ms,
       date: new Date().toISOString().slice(0, 10), demo: state.demo
     });
+    /* v2.12 — modelo trekking: completar el trek marca el checkpoint del lugar
+       (salvo demo: la demo no marca). */
+    if (!state.demo && trkA && trkA.verdict !== "rechazado") {
+      TRPRanking.trekDone({
+        runner: state.runner, slug: p.slug, ms,
+        date: new Date().toISOString().slice(0, 10)
+      });
+    }
     window.__trpShareData = {
       mode: "crono",
       runner: state.runner,
@@ -306,10 +321,10 @@
     $("metaTitle").innerHTML = `¡META!<br>${esc(p.nombre).toUpperCase()}`;
     $("metaSummary").innerHTML =
       `<strong class="runner-tag">${esc(state.runner)}</strong><br><br>` +
-      `Contrarreloj desde <strong>${esc(p.partida.nombre)}</strong><br>` +
+      `Trek desde <strong>${esc(p.partida.nombre)}</strong><br>` +
       `Tiempo: <strong class="mono">${TRP.formatMs(ms)}</strong>${how === "auto" ? " <small>(auto 📡)</small>" : ""}`;
     $("metaTable").innerHTML =
-      `<thead><tr><th>#</th><th>Corredor</th><th>Tiempo</th><th>Fecha</th></tr></thead><tbody>` +
+      `<thead><tr><th>#</th><th>Trekker</th><th>Tiempo</th><th>Fecha</th></tr></thead><tbody>` +
       top.map((r, i) => `<tr class="rank-${i + 1}">
         <td><span class="pos">${i + 1}</span></td>
         <td><strong>${esc(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
@@ -328,7 +343,7 @@
              ${trkA && trkA.verdict === "revisar" ? `<p class="mono mt-2" style="font-size:.8rem;color:#9a6700;">⚠ Track marcado para revisión: ${esc(trkA.reasons.join(" · "))}</p>` : ""}
              ${trkA && trkA.verdict === "rechazado" ? `<p class="mono mt-2" style="font-size:.8rem;color:#b00020;">⛔ Track con anomalías: ${esc(trkA.reasons.join(" · "))}. No se puede publicar.</p>` : ""}</div>
            </div>`
-        : `<p class="mono mt-2" style="font-size:.85rem;color:#888;">Sin track GPS en esta contrarreloj (modo demo o GPS apagado).</p>`;
+        : `<p class="mono mt-2" style="font-size:.85rem;color:#888;">Sin track GPS en este trek (modo demo o GPS apagado).</p>`;
     }
     TRPModal.open("modalMeta");
     renderBoard();
@@ -336,7 +351,7 @@
   }
 
   function abortRace() {
-    if (!confirm("¿Abandonar la contrarreloj? Se perderá este intento.")) return;
+    if (!confirm("¿Abandonar el trek? Se perderá este intento.")) return;
     clearInterval(state.timerId);
     stopGps();
     clearRace();
@@ -358,7 +373,7 @@
     state.inStartZone = false;
     if (window.TRPTrack) { TRPTrack.reset(); const tl = $("crTrackLive"); if (tl) tl.innerHTML = "📏 — · ⛰️ —"; }
     refreshStart();
-    TRPToast.show("Contrarreloj abandonada. La revancha te espera.");
+    TRPToast.show("Trek abandonado. La revancha te espera.");
   }
 
   /* ---------- Reanudar ---------- */
@@ -387,7 +402,7 @@
     $("crBtnStart").disabled = true;
     $("crBtnFinish").disabled = false;
     $("crBtnAbort").disabled = false;
-    $("crChronoSub").textContent = `Contrarreloj reanudada: ${p.partida.nombre} → ${p.nombre}.`;
+    $("crChronoSub").textContent = `Trek reanudado: ${p.partida.nombre} → ${p.nombre}.`;
     if (!state.demo && TRPGps.supported()) {
       state.gpsOn = true;
       state.watchId = navigator.geolocation.watchPosition(
@@ -397,20 +412,20 @@
       $("crGpsStatus").textContent = "Demo 📡";
     }
     renderBoard();
-    TRPToast.show("Contrarreloj reanudada. ¡A seguir!");
+    TRPToast.show("Trek reanudado. ¡A seguir!");
   }
 
   /* ---------- Eventos ---------- */
   $("crBtnRunner").addEventListener("click", () => {
     const v = $("crRunnerName").value.trim().toUpperCase().slice(0, 16);
-    if (!v) { TRPToast.show("Escribe tu nombre de corredor."); return; }
+    if (!v) { TRPToast.show("Escribe tu nombre de trekker."); return; }
     state.runner = v;
     $("crRunnerTag").textContent = v;
     $("crRunnerEcho").style.display = "block";
     $("crBtnRunner").disabled = true;
     $("crRunnerName").disabled = true;
     refreshStart();
-    TRPToast.show("Corredor registrado: " + v);
+    TRPToast.show("Trekker registrado: " + v);
   });
   $("crRunnerName").addEventListener("keydown", (e) => { if (e.key === "Enter") $("crBtnRunner").click(); });
 
@@ -438,7 +453,7 @@
   $("crBtnDiscard").addEventListener("click", () => {
     clearRace();
     TRPModal.close("modalResumeCrono");
-    TRPToast.show("Contrarreloj anterior descartada.");
+    TRPToast.show("Trek anterior descartado.");
   });
 
   /* ---------- Init ---------- */

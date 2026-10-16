@@ -141,6 +141,7 @@
   /* ---------- RANKING: almacenamiento local ---------- */
   const KEY = "trp_rankings_v1";
   const CRONO_KEY = "trp_crono_v1";
+  const TREKS_KEY = "trp_treks_v1";
   window.TRPRanking = {
     all() {
       let mine = [];
@@ -189,7 +190,26 @@
       return this.cronoAll()
         .filter(r => r.slug === slug && r.ms != null)
         .sort((a, b) => a.ms - b.ms);
-    }
+    },
+
+    /* ----- Treks completados (v2.12): la colección de 12 checkpoints.
+       Completar el trek cronometrado de un lugar marca su checkpoint. ----- */
+    treks() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(TREKS_KEY) || "{}");
+        return (raw && typeof raw === "object") ? raw : {};
+      } catch (e) { return {}; }
+    },
+    trekDone(entry) {
+      const all = this.treks();
+      const prev = all[entry.slug];
+      if (!prev || (entry.ms != null && entry.ms < prev.ms)) {
+        all[entry.slug] = { ms: entry.ms, date: entry.date, runner: entry.runner };
+      }
+      try { localStorage.setItem(TREKS_KEY, JSON.stringify(all)); } catch (e) {}
+      return all;
+    },
+    treksCount() { return Object.keys(this.treks()).length; }
   };
 
   /* ---------- GEO: distancia haversina ---------- */

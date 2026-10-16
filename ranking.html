@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ranking — TUSRUTASPERU</title>
-<meta name="description" content="Rankings oficiales: circuito completo más rápido, récords por checkpoint y conquistadores totales de Huaral.">
+<meta name="description" content="Rankings oficiales: treks cronometrados por lugar, récords por checkpoint y conquistadores totales de Huaral.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d8ff00">
 <meta name="mobile-web-app-capable" content="yes">
@@ -36,7 +36,7 @@
   <div class="wrap">
     <span class="kicker mono tag">◈ El palmarés oficial</span>
     <h1 class="display-lg mt-2">AQUÍ MANDAN<br>LOS <span class="text-blood">TIEMPOS.</span></h1>
-    <p class="lead">El palmarés oficial, en tu dispositivo y contra todo el Perú: el circuito completo más rápido, el récord de cada checkpoint, la lista sagrada de conquistadores… y la contrarreloj de cada lugar, con partida en su comunidad.</p>
+    <p class="lead">El palmarés oficial, en tu dispositivo y contra todo el Perú: el trek cronometrado de cada lugar con partida en su comunidad, el récord de cada checkpoint y la lista sagrada de conquistadores.</p>
   </div>
 </section>
 
@@ -53,7 +53,7 @@
     <div class="board reveal mb-2">
       <div class="board-head"><h3>🏆 Circuito completo · más rápido</h3><span class="tag">Oficial</span></div>
       <table>
-        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
+        <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
         <tbody id="boardFull"></tbody>
       </table>
     </div>
@@ -61,7 +61,7 @@
     <div class="board reveal mb-2">
       <div class="board-head"><h3>⚡ Récord por checkpoint</h3><span class="tag">Parciales</span></div>
       <table>
-        <thead><tr><th>#</th><th>Checkpoint</th><th>Mejor parcial</th><th>Corredor</th></tr></thead>
+        <thead><tr><th>#</th><th>Checkpoint</th><th>Mejor parcial</th><th>Trekker</th></tr></thead>
         <tbody id="boardCps"></tbody>
       </table>
     </div>
@@ -69,22 +69,22 @@
     <div class="board reveal mb-2">
       <div class="board-head"><h3>👑 Conquistadores totales</h3><span class="tag">12/12</span></div>
       <table>
-        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
+        <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
         <tbody id="boardConq"></tbody>
       </table>
       <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">Solo entran quienes completaron los 12 checkpoints en un mismo intento. El resto, a entrenar.</p>
     </div>
 
     <div class="board reveal mb-2">
-      <div class="board-head"><h3>⏱ Contrarreloj por lugar</h3><span class="tag">Desde la comunidad</span></div>
+      <div class="board-head"><h3>⏱ Trek cronometrado por lugar</h3><span class="tag">Desde la comunidad</span></div>
       <div style="padding:1.1rem 1.4rem 0;">
-        <select id="selCronoPlace" aria-label="Lugar de la contrarreloj" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
+        <select id="selCronoPlace" aria-label="Lugar del trek" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
       </div>
       <table>
-        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo</th><th>Fecha</th></tr></thead>
+        <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo</th><th>Fecha</th></tr></thead>
         <tbody id="boardCrono"></tbody>
       </table>
-      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">El cronómetro arranca en la comunidad de partida y se detiene en el lugar. <a href="competencia.html?modo=crono">Corre tu contrarreloj →</a></p>
+      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">El cronómetro arranca en la comunidad de partida y se detiene en el lugar. <a href="competencia.html?modo=trek">Trekkea tu trek →</a></p>
     </div>
     </div><!-- /rankLocal -->
 
@@ -92,19 +92,19 @@
       <div class="board reveal mb-2">
         <div class="board-head"><h3>🌐 Circuito completo · global</h3><span class="tag">Todo el Perú</span></div>
         <table>
-          <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th><th></th></tr></thead>
+          <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo total</th><th>Fecha</th><th></th></tr></thead>
           <tbody id="boardGlobalFull"></tbody>
         </table>
         <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);" id="globalFullNote"></p>
       </div>
 
       <div class="board reveal mb-2">
-        <div class="board-head"><h3>🌐 Contrarreloj por lugar · global</h3><span class="tag">Todo el Perú</span></div>
+        <div class="board-head"><h3>🌐 Trek cronometrado por lugar · global</h3><span class="tag">Todo el Perú</span></div>
         <div style="padding:1.1rem 1.4rem 0;">
-          <select id="selGlobalCrono" aria-label="Lugar de la contrarreloj global" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
+          <select id="selGlobalCrono" aria-label="Lugar del trek global" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
         </div>
         <table>
-          <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo</th><th>Fecha</th><th></th></tr></thead>
+          <thead><tr><th>Pos</th><th>Trekker</th><th>Tiempo</th><th>Fecha</th><th></th></tr></thead>
           <tbody id="boardGlobalCrono"></tbody>
         </table>
         <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);" id="globalCronoNote"></p>
@@ -138,7 +138,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.11</span>
+      <span>Temporada 01 · v2.12</span>
     </div>
   </div>
 </footer>
@@ -189,7 +189,7 @@
     }
   });
 
-  /* ----- Contrarreloj por lugar ----- */
+  /* ----- Trek cronometrado por lugar ----- */
   const sel = document.getElementById("selCronoPlace");
   sel.innerHTML = TRP.PLACES.map((p, i) =>
     `<option value="${p.slug}">${String(i + 1).padStart(2, "0")} · ${p.nombre} — partida: ${p.partida.nombre}</option>`).join("");
@@ -202,7 +202,7 @@
           <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
           <td class="mono">${r.date || "—"}</td>
         </tr>`).join("")
-      : `<tr><td colspan="4" class="center" style="padding:2rem;">Sin marcas todavía. <a href="competencia.html?modo=crono&lugar=${sel.value}">Sé el primero →</a></td></tr>`;
+      : `<tr><td colspan="4" class="center" style="padding:2rem;">Sin marcas todavía. <a href="competencia.html?modo=trek&lugar=${sel.value}">Sé el primero →</a></td></tr>`;
   }
   sel.addEventListener("change", renderCrono);
   renderCrono();
@@ -309,7 +309,7 @@
             <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
             <td class="mono">${r.date || "—"}</td>
             <td><button class="btn btn-ghost btn-small" data-rep="crono:${i}" title="Reportar tiempo sospechoso" style="padding:.2rem .5rem;">🚩</button></td></tr>`).join("")
-        : `<tr><td colspan="5" class="center" style="padding:2rem;">Sin tiempos publicados en este lugar. <a href="competencia.html?modo=crono&lugar=${gsel.value}">Sé el primero →</a></td></tr>`;
+        : `<tr><td colspan="5" class="center" style="padding:2rem;">Sin tiempos publicados en este lugar. <a href="competencia.html?modo=trek&lugar=${gsel.value}">Sé el primero →</a></td></tr>`;
       const p = TRP.place(gsel.value);
       note2.textContent = `Global · ${p.nombre} (partida: ${p.partida.nombre}) · ${rows.length} tiempos.`;
     } catch (e) {

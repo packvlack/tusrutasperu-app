@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Circuito — TUSRUTASPERU</title>
+<title>Mis 12 treks — TUSRUTASPERU</title>
 <meta name="description" content="El circuito oficial: 12 checkpoints desde la Plaza de Armas de Huaral hasta la meta en Rúpac. Reglas de competencia.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d8ff00">
@@ -34,31 +34,32 @@
 <section class="page-head">
   <span class="head-index">01</span>
   <div class="wrap">
-    <span class="kicker mono tag">◈ Temporada 01 · El circuito oficial</span>
-    <h1 class="display-lg mt-2">DE HUARAL<br>A <span class="text-blood">RÚPAC.</span></h1>
-    <p class="lead">Doce checkpoints en orden sagrado: de la costa a la puna, de fácil a legendario, agrupados por ejes geográficos para que la hazaña sea posible. El orden no se negocia.</p>
+    <span class="kicker mono tag">◈ Temporada 01 · Tu colección</span>
+    <h1 class="display-lg mt-2">12 TREKS.<br>UNA <span class="text-blood">LEYENDA.</span></h1>
+    <p class="lead">Doce treks de altura, cada uno con partida en su comunidad. Completa un trek cronometrado y su checkpoint queda marcado. Sin orden obligatorio: a tu ritmo, como se trekkea de verdad.</p>
   </div>
 </section>
 
 <section class="section" style="padding-top:3rem;">
   <div class="wrap" style="max-width:1000px;">
     <div class="gps-panel reveal mb-2" style="border-left:12px solid var(--acid);">
-      <p class="mono" style="font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🏁 Punto de partida</p>
-      <h3 class="display-sm">Plaza de Armas de Huaral</h3>
-      <p class="mt-2">Activa tu GPS dentro de la ciudad. El cronómetro solo arranca aquí: si intentas empezar en otro lado, la app te lo va a decir en tu cara.</p>
+      <p class="mono" style="font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🏔 Tu progreso</p>
+      <h3 class="display-sm"><span id="trekCount">0</span> de 12 treks</h3>
+      <div style="height:14px;border:var(--border);margin-top:.8rem;background:#fff;"><div id="trekBar" style="height:100%;width:0%;background:var(--acid);"></div></div>
+      <p class="mt-2 mono" style="font-size:.8rem;color:#555;" id="trekMsg">Trekkea tu primer lugar y marca tu primer checkpoint.</p>
     </div>
     <ol class="timeline" id="timeline"></ol>
     <div class="gps-panel reveal mt-3" style="border-left:12px solid var(--blood);">
-      <p class="mono" style="font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🏆 La meta</p>
-      <h3 class="display-sm">Rúpac · 3.580 msnm</h3>
-      <p class="mt-2">El “Machu Picchu limeño”, Patrimonio Cultural de la Nación. Cruzar esta meta con el cronómetro corriendo te convierte en <strong>conquistador oficial de Huaral</strong> y tu tiempo entra al ranking para la eternidad.</p>
+      <p class="mono" style="font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🏆 La corona</p>
+      <h3 class="display-sm">Conquistador de Huaral</h3>
+      <p class="mt-2">Completa los 12 treks y entras al palmarés de los conquistadores de Huaral. Rúpac, el “Machu Picchu limeño”, es la joya de la colección.</p>
     </div>
   </div>
 </section>
 
 <div class="ticker">
   <div class="ticker-inner">
-    <span>◈ El orden no se negocia</span><span>◈ 12 checkpoints</span><span>◈ Sin atajos</span><span>◈ Meta: Rúpac</span><span>◈ TusRutasPerú</span>
+    <span>◈ 12 treks</span><span>◈ A tu ritmo</span><span>◈ Sin atajos</span><span>◈ Altura de verdad</span><span>◈ TusRutasPerú</span>
   </div>
 </div>
 
@@ -69,10 +70,10 @@
       <h2 class="display-md">Las reglas<br>del <span class="text-blood">juego.</span></h2>
     </div>
     <ol class="rule-list">
-      <li class="reveal"><strong>El GPS manda.</strong> Sin geolocalización activada no hay carrera. La app verifica tu punto de partida en Huaral.</li>
-      <li class="reveal"><strong>El orden es sagrado.</strong> Los checkpoints se marcan en secuencia, del 01 al 12. Saltarse uno invalida el intento.</li>
-      <li class="reveal"><strong>Cada llegada cuenta.</strong> Marca tu llegada manualmente o deja que la geocerca la detecte automáticamente al acercarte.</li>
-      <li class="reveal"><strong>El cronómetro no perdona.</strong> Corre desde tu partida en Huaral hasta que cruzas la meta en Rúpac. Descansos incluidos: planifica bien.</li>
+      <li class="reveal"><strong>El GPS manda.</strong> Sin geolocalización activada no hay trek. La app verifica que estés en la comunidad de partida.</li>
+      <li class="reveal"><strong>Sin orden obligatorio.</strong> Trekkea los 12 lugares en el orden que quieras, a tu ritmo. Cada trek completado marca su checkpoint.</li>
+      <li class="reveal"><strong>Cada llegada cuenta.</strong> El cronómetro se detiene al llegar al lugar (geocerca automática) o marcando tu llegada manualmente.</li>
+      <li class="reveal"><strong>El cronómetro no perdona.</strong> Trekkea desde la comunidad de partida hasta el lugar. Descansos incluidos: la altura se respeta.</li>
       <li class="reveal"><strong>Juego limpio.</strong> Tiempos imposibles o ubicaciones falsas quedan fuera del ranking. El honor del chasqui está en juego.</li>
       <li class="reveal"><strong>La montaña primero.</strong> Lleva agua, abrigo y respeto por la altura. Ningún ranking vale un mal de altura.</li>
     </ol>
@@ -100,7 +101,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.11</span>
+      <span>Temporada 01 · v2.12</span>
     </div>
   </div>
 </footer>
@@ -114,22 +115,34 @@
     if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
   }), { threshold: 0.1 });
 
-  tl.innerHTML = TRP.checkpoints().map((p, i) => `
+  const done = TRPRanking.treks();
+  const n = Object.keys(done).length;
+  document.getElementById("trekCount").textContent = n;
+  document.getElementById("trekBar").style.width = (n / 12 * 100) + "%";
+  document.getElementById("trekMsg").textContent = n === 0
+    ? "Trekkea tu primer lugar y marca tu primer checkpoint."
+    : (n === 12 ? "¡Colección completa! Eres conquistador de Huaral. 🏆"
+                : `Te faltan ${12 - n}: cada trek cronometrado marca su checkpoint.`);
+  tl.innerHTML = TRP.checkpoints().map((p, i) => {
+    const d = done[p.slug];
+    return `
     <li class="etapa reveal ${p.esMeta ? "meta" : ""}">
-      <div class="etapa-num">${p.esMeta ? "🏆" : String(i + 1).padStart(2, "0")}</div>
+      <div class="etapa-num">${d ? "✔" : String(i + 1).padStart(2, "0")}</div>
       <a class="etapa-card" href="lugar.html?id=${p.slug}">
         <div class="thumb"><img src="${p.img}" alt="${p.alt || p.nombre}" loading="lazy"></div>
         <div class="einfo">
           <h3>${p.nombre}</h3>
           <p>${p.gancho}</p>
           <div class="etapa-tags">
-            <span class="tag">${p.tipoLabel}</span>
+            <span class="tag">${d ? "✔ Completado" : "Pendiente"}</span>
+            ${d ? `<span class="tag">${TRP.formatMsShort(d.ms)}</span>` : ""}
             <span class="tag">${p.dificultad}</span>
-            <span class="tag">${p.altitud}</span>
           </div>
+          ${d ? "" : `<p class="mono mt-2" style="font-size:.78rem;"><a href="competencia.html?modo=trek&lugar=${p.slug}">Trekkea este lugar →</a></p>`}
         </div>
       </a>
-    </li>`).join("");
+    </li>`;
+  }).join("");
   tl.querySelectorAll(".reveal").forEach(el => io.observe(el));
 })();
 </script>

@@ -51,7 +51,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.11</span>
+      <span>Temporada 01 · v2.12</span>
     </div>
   </div>
 </footer>
@@ -79,7 +79,9 @@
   const idx = TRP.CIRCUIT.indexOf(p.slug);
   const prev = idx > 0 ? TRP.place(TRP.CIRCUIT[idx - 1]) : null;
   const next = idx < TRP.CIRCUIT.length - 1 ? TRP.place(TRP.CIRCUIT[idx + 1]) : null;
-  const best = TRPRanking.bestByCheckpoint()[p.slug];
+  const _treks = TRPRanking.treks();
+  const best = _treks[p.slug] || TRPRanking.bestByCheckpoint()[p.slug];
+  const _nTreks = Object.keys(_treks).length;
 
   const difBars = [1, 2, 3].map(i => `<i class="${i <= p.difNivel ? "on" : ""}"></i>`).join("");
 
@@ -100,7 +102,7 @@
       <div><small>Distancia</small><strong>${p.distancia}</strong></div>
       <div><small>Altitud</small><strong>${p.altitud}</strong></div>
       <div><small>Dificultad</small><strong>${p.dificultad}</strong><span class="dif-bar">${difBars}</span></div>
-      <div><small>Partida contrarreloj</small><strong>⏱ ${p.partida.nombre}</strong></div>
+      <div><small>Partida del trek</small><strong>⏱ ${p.partida.nombre}</strong></div>
     </div>
   </div>
 
@@ -133,7 +135,7 @@
         <table><tbody><tr class="rank-1">
           <td><span class="pos">1</span></td>
           <td><strong>${TRPEscape(best.runner)}</strong></td>
-          <td class="mono">${TRP.formatMsShort(best.ms)} <small style="color:#555;">(parcial)</small></td>
+          <td class="mono">${TRP.formatMsShort(best.ms)} <small style="color:#555;">(trek)</small></td>
           <td class="mono">${best.date || "—"}</td>
         </tr></tbody></table>
       </div>` : ""}
@@ -144,19 +146,19 @@
       </div>
 
       <div class="center mt-3">
-        <h2 class="display-sm mb-2">¿Cómo lo corres?</h2>
-        <p class="mono mb-2" style="font-size:.85rem;color:#555;">Son dos competencias distintas: la contrarreloj <strong>no</strong> marca el checkpoint del circuito.</p>
+        <h2 class="display-sm mb-2">¿Cómo lo trekkeas?</h2>
+        <p class="mono mb-2" style="font-size:.85rem;color:#555;">Trek cronometrado desde <strong>${p.partida.nombre}</strong>: al completarlo se marca el checkpoint de este lugar.</p>
         <div class="split" style="justify-content:center;align-items:stretch;">
           <div class="card" style="max-width:360px;text-align:left;">
             <div class="card-body">
-              <a href="competencia.html?modo=crono&lugar=${p.slug}" class="btn btn-primary btn-big" style="width:100%;justify-content:center;">⏱ Contrarreloj</a>
-              <p class="mono mt-2" style="font-size:.8rem;color:#555;">Solo este lugar, contra el reloj, partiendo de <strong>${p.partida.nombre}</strong>. Tu tiempo entra al ranking de contrarreloj.</p>
+              <a href="competencia.html?modo=trek&lugar=${p.slug}" class="btn btn-primary btn-big" style="width:100%;justify-content:center;">⏱ Iniciar trek</a>
+              <p class="mono mt-2" style="font-size:.8rem;color:#555;">Activa tu GPS en la comunidad, trekkea hasta el lugar y detén el cronómetro. Tu tiempo entra al ranking.</p>
             </div>
           </div>
           <div class="card" style="max-width:360px;text-align:left;">
             <div class="card-body">
-              <a href="competencia.html" class="btn btn-dark btn-big" style="width:100%;justify-content:center;">▶ Circuito 12 checkpoints</a>
-              <p class="mono mt-2" style="font-size:.8rem;color:#555;">El circuito completo desde Huaral: este lugar cuenta como uno de tus 12 checkpoints.</p>
+              <a href="circuito.html" class="btn btn-dark btn-big" style="width:100%;justify-content:center;">🏔 Mis 12 treks</a>
+              <p class="mono mt-2" style="font-size:.8rem;color:#555;">Llevas <strong>${_nTreks} de 12</strong> treks. Completa todos y conquista Huaral.</p>
             </div>
           </div>
         </div>

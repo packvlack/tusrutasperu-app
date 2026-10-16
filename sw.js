@@ -3,7 +3,7 @@
    La app funciona sin conexión: el armazón se pre-cachea,
    las fotos/videos se cachean al usarse.
    ============================================================ */
-const CACHE = "trp-v2.11";
+const CACHE = "trp-v2.12";
 
 const SHELL = [
   "./",
@@ -31,7 +31,6 @@ const SHELL = [
   "./assets/fonts/SpaceMono-700-normal-latin-ext.woff2",
   "./assets/js/data.js",
   "./assets/js/app.js",
-  "./assets/js/competencia.js",
   "./assets/js/contrarreloj.js",
   "./assets/js/share.js",
   "./assets/js/track.js",
