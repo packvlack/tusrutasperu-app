@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TUSRUTASPERU — Corre la ruta. Conquista Huaral.</title>
+<meta name="description" content="La primera app de competencia viajera del Perú: 12 lugares de Huaral, GPS, cronómetro y ranking. Del pueblo a la meta en Rúpac.">
+<meta property="og:title" content="TUSRUTASPERU — Corre la ruta. Conquista Huaral.">
+<meta property="og:description" content="12 checkpoints en Huaral. Un GPS. Un cronómetro. Una meta: Rúpac.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/img/hero-poster.webp">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d8ff00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">◈</span> TUSRUTASPERU</a>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Inicio</a>
+    <a href="lugares.html">Lugares</a>
+    <a href="circuito.html">Circuito</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="competencia.html" class="nav-cta">Competir →</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <video class="hero-video" aria-hidden="true" autoplay muted loop playsinline poster="assets/img/hero-poster.webp">
+    <source src="assets/video/hero-loop.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="tag" style="background:var(--blood);color:#fff;border-color:#fff;">Temporada 01 · Provincia de Huaral</span>
+    <h1 class="hero-title" data-glitch>CORRE LA RUTA.<br><span class="outline">CONQUISTA</span> HUARAL.</h1>
+    <p class="hero-sub">La primera competencia viajera del Perú: 12 lugares — complejos arqueológicos, cataratas y lagunas — un GPS, un cronómetro y una sola meta: <strong>Rúpac</strong>.</p>
+    <div class="hero-actions">
+      <a href="competencia.html" class="btn btn-primary btn-big">▶ Iniciar competencia</a>
+      <a href="circuito.html" class="btn btn-big">Ver el circuito</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div><strong>12</strong> checkpoints oficiales</div>
+    <div><strong>GPS</strong> activación obligatoria</div>
+    <div><strong>01</strong> meta: Rúpac · 3.580 m</div>
+    <div><strong>∞</strong> gloria huaralina</div>
+  </div>
+</section>
+
+<div class="ticker acid">
+  <div class="ticker-inner">
+    <span>◈ Activa tu GPS</span><span>◈ Marca tu tiempo</span><span>◈ 12 checkpoints</span><span>◈ Meta: Rúpac</span><span>◈ Quien llega primero, manda</span><span>◈ TusRutasPerú</span>
+  </div>
+</div>
+
+<!-- ============ MANIFIESTO ============ -->
+<section class="section">
+  <div class="wrap manifiesto reveal">
+    <span class="kicker mono">El manifiesto</span>
+    <p class="mt-2">Huaral no se visita. <span class="hl">Huaral se corre.</span> Esta no es una guía turística: es una <span class="hl-blood">carrera contra el reloj</span> por templos de 5.000 años, cataratas de 600 metros y lagunas a 4.700 metros de altura. Sales del pueblo, marcas cada checkpoint con tu GPS y el ranking decide quién manda.</p>
+    <div class="mt-3 split">
+      <a href="lugares.html" class="btn btn-dark">Explorar los 12 lugares</a>
+      <span class="stamp blood">Sin atajos. Sin excusas.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="section bg-paper-dim" style="border-top:var(--border);border-bottom:var(--border);">
+  <div class="wrap">
+    <div class="stats-band reveal">
+      <div><strong data-count="12">0</strong><small>Checkpoints</small></div>
+      <div><strong data-count="5000">0</strong><small>Años del templo más antiguo</small></div>
+      <div><strong>600 m</strong><small>Caída de Huachac</small></div>
+      <div><strong>4.700 m</strong><small>Altura de Azulcocha</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESTACADOS ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">◈ Lugares destacados</span>
+      <h2 class="display-md">Tres razones para<br>empezar <span class="text-blood">ya.</span></h2>
+    </div>
+    <div class="grid-3" id="featuredGrid"></div>
+    <div class="center mt-3 reveal">
+      <a href="lugares.html" class="btn btn-primary">Ver los 12 lugares →</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker blood">
+  <div class="ticker-inner">
+    <span>◈ Rúpac te espera</span><span>◈ El colchón de nubes es tu alfombra roja</span><span>◈ 12 checkpoints</span><span>◈ Una sola meta</span><span>◈ TusRutasPerú</span>
+  </div>
+</div>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<section class="section bg-ink">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker mono" style="color:var(--acid);">◈ Así se compite</span>
+      <h2 class="display-md" style="color:var(--paper);">Cuatro pasos.<br>Cero <span class="text-acid">piedad.</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Regístrate</h3><p>Elige tu nombre de corredor. Será el que el ranking recuerde… o el que todos se burlen.</p></div>
+      <div class="step reveal" data-delay="1"><h3>Activa tu GPS</h3><p>El sistema verifica que partas desde Huaral. Sin GPS no hay carrera: así de simple.</p></div>
+      <div class="step reveal" data-delay="2"><h3>Marca checkpoints</h3><p>El cronómetro corre desde el pueblo. Cada llegada se registra: manual o automática por geocerca.</p></div>
+      <div class="step reveal" data-delay="3"><h3>Corona Rúpac</h3><p>Cruza la meta a 3.580 m y tu tiempo entra al ranking oficial. La gloria es para siempre.</p></div>
+    </div>
+    <div class="center mt-3 reveal">
+      <a href="competencia.html" class="btn btn-primary btn-big">Quiero competir</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SPOT ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">◈ El spot oficial · 15 segundos</span>
+      <h2 class="display-md">Siente la <span class="text-blood">ruta.</span></h2>
+    </div>
+    <div class="spot-frame reveal">
+      <span class="spot-label">▶ Spot 15s</span>
+      <video controls preload="metadata" poster="assets/img/hero-poster.webp">
+        <source src="assets/video/spot-15s.mp4" type="video/mp4">
+        Tu navegador no reproduce video.
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RANKING PREVIEW ============ -->
+<section class="section bg-paper-dim" style="border-top:var(--border);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">◈ Ranking general</span>
+      <h2 class="display-md">Los que ya<br><span class="text-blood">mandan.</span></h2>
+      <p class="lead mt-2">El circuito completo más rápido. ¿Tu nombre cabe ahí? Solo hay una forma de averiguarlo.</p>
+    </div>
+    <div class="board reveal">
+      <div class="board-head"><h3>🏆 Circuito completo</h3><span class="tag">Top 3</span></div>
+      <table>
+        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
+        <tbody id="top3body"></tbody>
+      </table>
+    </div>
+    <div class="split mt-3 reveal">
+      <a href="ranking.html" class="btn btn-dark">Ranking completo →</a>
+      <a href="competencia.html" class="btn btn-danger">Destronarlos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="section bg-acid" style="border-top:var(--border);">
+  <div class="wrap center reveal">
+    <span class="stamp">Temporada 01 · Huaral</span>
+    <h2 class="display-lg mt-2">¿CORRES<br>O MIRAS?</h2>
+    <p class="lead mt-2" style="margin-inline:auto;">Doce lugares. Un cronómetro. Una meta a 3.580 metros. El ranking no espera a nadie.</p>
+    <div class="mt-3"><a href="competencia.html" class="btn btn-dark btn-big">▶ Activar GPS y competir</a></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú. Corre la ruta, marca tu tiempo, conquista el ranking.</p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
+        <p class="mt-2"><a href="https://www.tiktok.com/@tusrutas" target="_blank" rel="noopener">TikTok · @tusrutas</a><br><a href="https://www.facebook.com/TusRutasPeru/" target="_blank" rel="noopener">Facebook · TusRutasPeru</a><br><a href="https://tusrutasperu.com/" target="_blank" rel="noopener">tusrutasperu.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
+      <span>Temporada 01 · v2.9 <a href="prueba.html" title="Modo prueba" style="opacity:.5;text-decoration:none;">🧪</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  // Destacados: Rúpac (meta), Huachac, Azulcocha
+  const picks = ["rupac", "huachac", "azulcocha"];
+  const grid = document.getElementById("featuredGrid");
+  grid.innerHTML = picks.map((slug, i) => {
+    const p = TRP.place(slug);
+    return `<a class="card reveal" data-delay="${i}" href="lugar.html?id=${p.slug}" style="text-decoration:none;color:inherit;">
+      <div class="card-img"><span class="card-num">${p.esMeta ? "🏆" : "0" + (i + 1)}</span><img src="${p.img}" alt="${p.alt || p.nombre}" loading="lazy"></div>
+      <div class="card-body">
+        <span class="tag">${p.tipoLabel}</span>
+        <h3 class="display-sm mt-2">${p.nombre}</h3>
+        <p class="mt-2" style="font-size:.95rem;">${p.gancho}</p>
+      </div>
+    </a>`;
+  }).join("");
+
+  // Top 3 ranking
+  const top = TRPRanking.all().slice(0, 3);
+  document.getElementById("top3body").innerHTML = top.map((r, i) => `
+    <tr class="rank-${i + 1}">
+      <td><span class="pos">${i + 1}</span></td>
+      <td>${TRPEscape(r.runner)}${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ''}</td>
+      <td class="mono"><strong>${TRP.formatMs(r.totalMs)}</strong></td>
+      <td class="mono">${r.date || "—"}</td>
+    </tr>`).join("");
+
+  // Contadores animados (M7)
+  const cio = new IntersectionObserver((es) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    cio.unobserve(el);
+    const target = parseInt(el.dataset.count, 10);
+    if (isNaN(target)) return;
+    const t0 = performance.now(), dur = 1200;
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }), { threshold: 0.5 });
+  document.querySelectorAll("[data-count]").forEach(el => cio.observe(el));
+
+  // Re-observar reveals inyectados
+  const io = new IntersectionObserver((es) => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  grid.querySelectorAll(".reveal").forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>

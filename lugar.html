@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lugar — TUSRUTASPERU</title>
+<meta name="description" content="Ficha completa del lugar: historia, datos, dificultad y cómo llegar.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d8ff00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">◈</span> TUSRUTASPERU</a>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Inicio</a>
+    <a href="lugares.html">Lugares</a>
+    <a href="circuito.html">Circuito</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="competencia.html" class="nav-cta">Competir →</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
+</header>
+
+<div id="lugarRoot"></div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú.</p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
+        <p class="mt-2"><a href="https://www.tiktok.com/@tusrutas" target="_blank" rel="noopener">TikTok · @tusrutas</a><br><a href="https://www.facebook.com/TusRutasPeru/" target="_blank" rel="noopener">Facebook · TusRutasPeru</a><br><a href="https://tusrutasperu.com/" target="_blank" rel="noopener">tusrutasperu.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
+      <span>Temporada 01 · v2.9 <a href="prueba.html" title="Modo prueba" style="opacity:.5;text-decoration:none;">🧪</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  const slug = params.get("id");
+  const p = TRP.place(slug);
+  const root = document.getElementById("lugarRoot");
+
+  if (!p) {
+    document.title = "Lugar no encontrado — TUSRUTASPERU";
+    root.innerHTML = `<section class="page-head"><div class="wrap">
+      <h1 class="display-lg">404.<br>ESE LUGAR <span class="text-blood">NO EXISTE.</span></h1>
+      <p class="lead mt-2">O todavía no lo hemos conquistado. Vuelve al registro oficial.</p>
+      <div class="mt-3"><a href="lugares.html" class="btn btn-primary">← Volver a lugares</a></div>
+    </div></section>`;
+    return;
+  }
+
+  document.title = p.nombre + " — TUSRUTASPERU";
+  const idx = TRP.CIRCUIT.indexOf(p.slug);
+  const prev = idx > 0 ? TRP.place(TRP.CIRCUIT[idx - 1]) : null;
+  const next = idx < TRP.CIRCUIT.length - 1 ? TRP.place(TRP.CIRCUIT[idx + 1]) : null;
+  const best = TRPRanking.bestByCheckpoint()[p.slug];
+
+  const difBars = [1, 2, 3].map(i => `<i class="${i <= p.difNivel ? "on" : ""}"></i>`).join("");
+
+  root.innerHTML = `
+  <section class="lugar-hero">
+    <img src="${p.img}" alt="${p.alt || p.nombre}">
+    <div class="hero-overlay"></div>
+    <div class="lugar-hero-content">
+      <span class="tag">${p.esMeta ? "🏆 Checkpoint " + (idx + 1) + " · La meta" : "Checkpoint " + String(idx + 1).padStart(2, "0") + " de 12"}</span>
+      <h1 class="mt-2">${p.nombre}</h1>
+      <p class="mono mt-2" style="color:var(--acid);letter-spacing:.1em;">${p.tipoLabel.toUpperCase()}</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="lugar-facts reveal in">
+      <div><small>Distrito</small><strong>${p.distrito}</strong></div>
+      <div><small>Distancia</small><strong>${p.distancia}</strong></div>
+      <div><small>Altitud</small><strong>${p.altitud}</strong></div>
+      <div><small>Dificultad</small><strong>${p.dificultad}</strong><span class="dif-bar">${difBars}</span></div>
+      <div><small>Partida contrarreloj</small><strong>⏱ ${p.partida.nombre}</strong></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap" style="max-width:900px;">
+      <div class="gancho-block reveal in">
+        <small>◈ La frase que lo resume</small>
+        <p>“${p.gancho}”</p>
+      </div>
+
+      <h2 class="display-sm mb-2">La historia</h2>
+      <p class="lead">${p.descripcion}</p>
+
+      <h2 class="display-sm mt-3 mb-2">Datos de campo</h2>
+      <ul class="dato-list">
+        ${p.datos.map(d => `<li>${d}</li>`).join("")}
+        <li>Temporada recomendada: ${p.temporada}</li>
+      </ul>
+
+      ${p.img2 ? `
+      <h2 class="display-sm mt-3 mb-2">Desde otro ángulo</h2>
+      <div class="card reveal in">
+        <div class="card-img" style="aspect-ratio:16/9;"><img src="${p.img2}" alt="${p.alt2 || p.alt}" loading="lazy"></div>
+        <div class="card-body"><p class="mono" style="font-size:.8rem;color:#555;">◈ Foto de archivo · TusRutasPerú</p></div>
+      </div>` : ""}
+
+      ${best ? `
+      <div class="board mt-3">
+        <div class="board-head"><h3>⚡ Récord del checkpoint</h3><span class="tag">Oficial</span></div>
+        <table><tbody><tr class="rank-1">
+          <td><span class="pos">1</span></td>
+          <td><strong>${TRPEscape(best.runner)}</strong></td>
+          <td class="mono">${TRP.formatMsShort(best.ms)} <small style="color:#555;">(parcial)</small></td>
+          <td class="mono">${best.date || "—"}</td>
+        </tr></tbody></table>
+      </div>` : ""}
+
+      <div class="lugar-nav">
+        ${prev ? `<a href="lugar.html?id=${prev.slug}" class="btn">← ${prev.nombre}</a>` : `<span></span>`}
+        ${next ? `<a href="lugar.html?id=${next.slug}" class="btn btn-primary">${next.nombre} →</a>` : `<span></span>`}
+      </div>
+
+      <div class="center mt-3">
+        <div class="split" style="justify-content:center;">
+          <a href="competencia.html" class="btn btn-dark btn-big">▶ Circuito 12 checkpoints</a>
+          <a href="competencia.html?modo=crono&lugar=${p.slug}" class="btn btn-primary btn-big">⏱ Contrarreloj desde ${p.partida.nombre}</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+})();
+</script>
+</body>
+</html>

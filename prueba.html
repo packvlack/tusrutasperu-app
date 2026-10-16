@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modo prueba — TUSRUTASPERU</title>
+<meta name="description" content="Zona privada de pruebas de TUSRUTASPERU. Solo para verificar el funcionamiento antes del lanzamiento.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d8ff00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
+<style>
+/* Registros estilo actividad: uniforme y legible */
+.t-run{display:flex;justify-content:space-between;align-items:center;gap:1rem;width:100%;
+  text-align:left;background:var(--white);color:var(--ink);border:var(--border);
+  box-shadow:var(--shadow-sm);padding:1.1rem 1.2rem;margin-bottom:.8rem;cursor:pointer;font-family:inherit;}
+.t-run:active{transform:translateY(2px);}
+.t-run-route{display:block;font-size:.95rem;font-weight:700;margin-bottom:.35rem;}
+.t-run-big{display:block;font-family:var(--font-display);font-size:2rem;line-height:1;}
+.t-run-big small{font-size:1rem;}
+.t-run-time{display:block;font-size:1.05rem;color:#333;margin-top:.2rem;}
+.t-run-side{text-align:right;flex-shrink:0;}
+.t-run-side .mono{font-size:.78rem;color:#666;display:block;margin-bottom:.4rem;}
+#tModal{display:none;position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.72);
+  align-items:center;justify-content:center;padding:1rem;}
+#tModal.open{display:flex;}
+#tModal .tmodal-card{background:var(--paper);color:var(--ink);border:3px solid var(--ink);
+  box-shadow:8px 8px 0 var(--acid);max-width:560px;width:100%;padding:1.6rem;
+  position:relative;max-height:88vh;overflow:auto;}
+#tModal .tmodal-close{position:absolute;top:.5rem;right:.8rem;background:none;border:none;
+  font-size:1.5rem;cursor:pointer;color:var(--ink);}
+.t-stat-big{font-family:var(--font-display);font-size:2.3rem;line-height:1.05;}
+.t-drow{display:flex;justify-content:space-between;gap:1rem;padding:.65rem 0;border-bottom:1px solid #ddd;}
+.t-drow:last-child{border-bottom:none;}
+</style>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">◈</span> TUSRUTASPERU</a>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Inicio</a>
+    <a href="lugares.html">Lugares</a>
+    <a href="circuito.html">Circuito</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="competencia.html" class="nav-cta">Competir →</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
+</header>
+
+<section class="page-head">
+  <span class="head-index">▶</span>
+  <div class="wrap">
+    <span class="kicker mono tag" style="background:var(--acid);color:var(--ink);">🧪 Modo prueba · solo Paco</span>
+    <h1 class="display-lg mt-2">ZONA DE<br>PRUEBAS<span class="text-acid">.</span></h1>
+    <p class="lead">Registra una ruta (por ejemplo tu casa → tu trabajo), corre el cronómetro y guarda el resultado. Todo lo que hagas aquí es <strong>ficticio</strong>: no toca los rankings reales ni el ranking global. Cuando verifiques que todo funciona, avísame y elimino este apartado.</p>
+  </div>
+</section>
+
+<div class="wrap" style="max-width:1000px;padding-top:2.5rem;padding-bottom:4rem;">
+
+  <!-- 01 · Ruta -->
+  <div class="card reveal">
+    <span class="tag">01 · Tu ruta de prueba</span>
+    <h2 class="display-sm mt-2">Registra la ruta</h2>
+    <div class="split mt-2" style="gap:1rem;">
+      <div class="field" style="flex:2;margin-bottom:0;">
+        <label for="tRoute">Nombre de la ruta</label>
+        <input id="tRoute" type="text" maxlength="40" value="Casa → Trabajo" placeholder="Ej: Casa → Trabajo">
+      </div>
+      <div class="field" style="flex:1;margin-bottom:0;">
+        <label for="tKm">Distancia (km, opcional)</label>
+        <input id="tKm" type="number" min="0" step="0.1" placeholder="Se calcula sola con GPS">
+      </div>
+    </div>
+    <p class="mono mt-2" style="font-size:.8rem;color:#888;">Puedes cambiar el nombre cuando quieras antes de iniciar. Si el GPS registra tu recorrido, la distancia se calcula sola; si no, escríbela a mano.</p>
+  </div>
+
+  <!-- 02 · Cronómetro -->
+  <div class="card reveal mt-3">
+    <span class="tag">02 · Cronómetro</span>
+    <h2 class="display-sm mt-2">Corre tu ruta</h2>
+    <div class="chrono mt-2">
+      <span class="chrono-status" id="tStatus">En espera</span>
+      <div class="chrono-time" id="tTime">00:00:00</div>
+      <p class="mono mt-2" style="font-size:.8rem;color:#888;" id="tSub">Pulsa INICIAR cuando salgas de casa.</p>
+      <p class="mono mt-2" id="tTrackLive" style="font-size:.85rem;">📏 — · ⛰️ —</p>
+      <div class="chrono-controls">
+        <button class="btn btn-primary btn-big" id="tBtnStart">▶ Iniciar</button>
+        <button class="btn btn-dark" id="tBtnPause" disabled>⏸ Pausar</button>
+        <button class="btn btn-primary" id="tBtnFinish" disabled>🏁 Terminar y guardar</button>
+        <button class="btn btn-ghost" id="tBtnReset">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary btn-big" id="tBtnGps">📡 Activar GPS del celular</button>
+      <p class="mono mt-2" style="font-size:.8rem;color:#888;display:none;" id="tGpsInfo">—</p>
+    </div>
+  </div>
+
+  <!-- 03 · Registros -->
+  <div class="card reveal mt-3">
+    <span class="tag">03 · Mis registros de prueba</span>
+    <h2 class="display-sm mt-2">¿Se guardó bien?</h2>
+    <p class="lead" style="font-size:1rem;">Cada vez que terminas una ruta, el resultado aparece aquí. Así verificas que el guardado funciona.</p>
+    <div class="board mt-2">
+      <div class="board-head"><span>🧪 Registros de prueba</span><span class="tag">Solo local</span></div>
+      <div id="tBoard"><p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Corre tu primera ruta. →</p></div>
+    </div>
+    <button class="btn btn-danger btn-small mt-2" id="tBtnClear">🗑 Borrar todos los registros de prueba</button>
+  </div>
+
+  <div class="card reveal mt-3" style="border-color:var(--acid);">
+    <span class="tag" style="background:var(--acid);">Nota</span>
+    <p class="mt-2">Los registros de prueba viven <strong>separados</strong>: no aparecen en el ranking del circuito, ni en la contrarreloj, ni en el ranking global. El botón de publicar en ranking global <strong>no existe</strong> en este modo a propósito.</p>
+    <p class="mt-2">Cuando confirmes que todo funciona (cronómetro, guardado y tabla), dime <strong>"elimina el modo prueba"</strong> y lo quito de la app antes del lanzamiento.</p>
+  </div>
+
+</div>
+
+<!-- MODAL DETALLE DE REGISTRO -->
+<div id="tModal" role="dialog" aria-modal="true" aria-label="Detalle del registro">
+  <div class="tmodal-card">
+    <button class="tmodal-close" data-tclose aria-label="Cerrar">✕</button>
+    <span class="kicker mono tag">🧪 Detalle de prueba</span>
+    <h2 class="display-sm mt-2" id="tDRoute">—</h2>
+    <div class="split mt-2" style="gap:2.2rem;">
+      <div>
+        <p class="mono" style="color:#888;font-size:.78rem;letter-spacing:.1em;">DISTANCIA</p>
+        <p class="t-stat-big" id="tDKm">—</p>
+      </div>
+      <div>
+        <p class="mono" style="color:#888;font-size:.78rem;letter-spacing:.1em;">TIEMPO</p>
+        <p class="t-stat-big mono" id="tDMs">—</p>
+      </div>
+    </div>
+    <div class="mt-2" id="tDRows"></div>
+    <button class="btn mt-2" data-tclose>Cerrar</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú. Corre la ruta, marca tu tiempo, conquista el ranking.</p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
+        <p class="mt-2"><a href="https://www.tiktok.com/@tusrutasperu" target="_blank" rel="noopener">TikTok · @tusrutasperu</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
+      <span>Temporada 01 · v2.9 <a href="prueba.html" title="Modo prueba" style="opacity:.5;text-decoration:none;">🧪</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/track.js"></script>
+<script>
+/* MODO PRUEBA — lógica autocontenida. Datos en localStorage bajo "trp_test_runs_v1".
+   v2.7: tracking GPS automático con TRPTrack (distancia, desnivel, mapa). */
+(function () {
+  "use strict";
+  var KEY = "trp_test_runs_v1";
+  var $ = function (id) { return document.getElementById(id); };
+  var t0 = 0, acc = 0, tick = null, running = false, watchId = null, lastFix = null;
+
+  function p(n) { return String(n).padStart(2, "0"); }
+  function fmt(ms) {
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor((ms % 1000) / 100);
+    return p(Math.floor(s / 3600)) + ":" + p(Math.floor((s % 3600) / 60)) + ":" + p(s % 60) + "." + d;
+  }
+  function fmtShort(ms) {
+    var s = Math.floor(ms / 1000);
+    return p(Math.floor(s / 3600)) + ":" + p(Math.floor((s % 3600) / 60)) + ":" + p(s % 60);
+  }
+  function now() { return acc + (running ? performance.now() - t0 : 0); }
+  function paint() { $("tTime").textContent = fmt(now()); }
+
+  function setState(st) {
+    var el = $("tStatus");
+    el.textContent = st;
+    el.classList.toggle("live", st === "Corriendo");
+    $("tBtnStart").disabled = st !== "En espera" && st !== "Pausado";
+    $("tBtnStart").textContent = st === "Pausado" ? "▶ Reanudar" : "▶ Iniciar";
+    $("tBtnPause").disabled = st !== "Corriendo";
+    $("tBtnPause").textContent = st === "Pausado" ? "▶ Reanudar" : "⏸ Pausar";
+    $("tBtnFinish").disabled = !(st === "Corriendo" || st === "Pausado");
+  }
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; }
+  }
+  function saveAll(r) { localStorage.setItem(KEY, JSON.stringify(r)); }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function render() {
+    var runs = load(), box = $("tBoard");
+    if (!runs.length) {
+      box.innerHTML = '<p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Corre tu primera ruta. →</p>';
+      return;
+    }
+    box.innerHTML = runs.map(function (r, i) {
+      return '<button class="t-run" data-run="' + i + '">' +
+        '<span><span class="t-run-route">' + esc(r.route) + '</span>' +
+        '<span class="t-run-big">' + (r.km ? esc(r.km) + ' <small>KM</small>' : '—') + '</span>' +
+        '<span class="t-run-time mono">' + fmtShort(r.ms) + '</span></span>' +
+        '<span class="t-run-side"><span class="mono">' + esc(r.date) + '</span>' +
+        (r.gps ? '<span class="tag" style="font-size:.65rem;">📡 GPS</span>' : '') +
+        (r.track && r.track.points > 1 ? '<span class="tag" style="font-size:.65rem;background:var(--acid);">⛰️ +' + r.track.gainM + ' m</span>' : '') +
+        '</span></button>';
+    }).join("");
+    box.querySelectorAll("[data-run]").forEach(function (b) {
+      b.addEventListener("click", function () { openDetail(Number(b.dataset.run)); });
+    });
+  }
+
+  function row(label, value) {
+    return '<div class="t-drow"><span class="mono" style="color:#666;font-size:.85rem;">' +
+      label + '</span><strong class="mono">' + value + '</strong></div>';
+  }
+
+  function openDetail(i) {
+    var r = load()[i];
+    if (!r) return;
+    $("tDRoute").textContent = r.route || "Ruta de prueba";
+    $("tDKm").textContent = r.km ? r.km + " km" : "—";
+    $("tDMs").textContent = fmtShort(r.ms);
+    var h = "";
+    var vmed = (r.km && parseFloat(r.km) > 0 && r.ms > 0)
+      ? (parseFloat(r.km) / (r.ms / 3600000)).toFixed(1) + " km/h" : "—";
+    h += row("VELOCIDAD MEDIA", esc(vmed));
+    h += row("FECHA", esc(r.date || "—"));
+    if (r.ts) {
+      var ini = new Date(r.ts - r.ms);
+      h += row("HORA INICIO", p(ini.getHours()) + ":" + p(ini.getMinutes()));
+      var fin = new Date(r.ts);
+      h += row("HORA FIN", p(fin.getHours()) + ":" + p(fin.getMinutes()));
+    }
+    h += row("GPS", r.gps ? "📡 Activado" : "Apagado");
+    if (r.track && r.track.points > 1) {
+      h += row("DESNIVEL", "+" + r.track.gainM + " m / −" + r.track.lossM + " m");
+      if (r.track.altMax != null) h += row("ALTITUD MÁX", r.track.altMax + " m");
+      h += row("PUNTOS GPS", r.track.points);
+    }
+    if (r.coords) h += row("COORDENADAS", r.coords.lat.toFixed(5) + ", " + r.coords.lng.toFixed(5));
+    if (r.svg) h += '<div class="mt-2">' + r.svg + '</div>';
+    $("tDRows").innerHTML = h;
+    $("tModal").classList.add("open");
+  }
+
+  document.querySelectorAll("[data-tclose]").forEach(function (b) {
+    b.addEventListener("click", function () { $("tModal").classList.remove("open"); });
+  });
+  $("tModal").addEventListener("click", function (e) {
+    if (e.target === $("tModal")) $("tModal").classList.remove("open");
+  });
+
+  function trackLiveReset() {
+    if (window.TRPTrack) { TRPTrack.start(); }
+    $("tTrackLive").textContent = "📏 0.00 km · ⛰️ +0 m";
+  }
+  function trackLivePaint() {
+    if (!window.TRPTrack) return;
+    var s = TRPTrack.stats();
+    $("tTrackLive").textContent = "📏 " + TRPTrack.fmtKm(s.km) + " km · ⛰️ +" + s.gainM + " m";
+  }
+  $("tBtnStart").addEventListener("click", function () {
+    if (!running) { t0 = performance.now(); running = true; tick = setInterval(paint, 100); trackLiveReset(); }
+    setState("Corriendo");
+    var r = $("tRoute").value.trim() || "Ruta de prueba";
+    $("tSub").textContent = "Corriendo: " + r + ". Pulsa TERMINAR al llegar.";
+  });
+  $("tBtnPause").addEventListener("click", function () {
+    if (running) {
+      acc += performance.now() - t0; running = false;
+      clearInterval(tick); paint(); setState("Pausado");
+      $("tSub").textContent = "En pausa. Reanuda cuando sigas.";
+    } else if ($("tStatus").textContent === "Pausado") {
+      t0 = performance.now(); running = true; tick = setInterval(paint, 100);
+      setState("Corriendo");
+    }
+  });
+  $("tBtnFinish").addEventListener("click", function () {
+    if (running) { acc += performance.now() - t0; running = false; }
+    clearInterval(tick); paint();
+    var ms = now();
+    if (ms < 1000 && !confirm("El tiempo es menor a 1 segundo. ¿Guardar igual?")) return;
+    var runs = load();
+    var d = new Date();
+    var trk = (window.TRPTrack) ? TRPTrack.stats() : null;
+    var autoKm = (trk && trk.points > 1) ? TRPTrack.fmtKm(trk.km) : "";
+    runs.unshift({
+      route: $("tRoute").value.trim() || "Ruta de prueba",
+      km: autoKm || $("tKm").value.trim(),
+      kmAuto: !!autoKm,
+      ms: Math.round(ms),
+      date: d.toLocaleDateString("es-PE") + " " + p(d.getHours()) + ":" + p(d.getMinutes()),
+      ts: Date.now(),
+      gps: !!lastFix,
+      coords: lastFix ? { lat: lastFix.lat, lng: lastFix.lng } : null,
+      track: (trk && trk.points > 1) ? trk : null,
+      svg: (window.TRPTrack && trk && trk.points > 1) ? TRPTrack.toSVG(640, 300) : ""
+    });
+    saveAll(runs); render();
+    acc = 0; paint(); setState("En espera");
+    $("tTrackLive").textContent = "📏 — · ⛰️ —";
+    $("tSub").textContent = "✔ Resultado guardado en tus registros de prueba.";
+  });
+  $("tBtnReset").addEventListener("click", function () {
+    clearInterval(tick); running = false; acc = 0; paint(); setState("En espera");
+    if (window.TRPTrack) { TRPTrack.reset(); }
+    $("tTrackLive").textContent = "📏 — · ⛰️ —";
+    $("tSub").textContent = "Pulsa INICIAR cuando salgas de casa.";
+  });
+  $("tBtnClear").addEventListener("click", function () {
+    if (!load().length) return;
+    if (confirm("¿Borrar todos los registros de prueba?")) { saveAll([]); render(); }
+  });
+
+  var gpsOn = false;
+  function gpsUI() {
+    var info = $("tGpsInfo"), btn = $("tBtnGps");
+    if (gpsOn) {
+      btn.innerHTML = "📡 GPS activo — tocar para desactivar";
+      btn.classList.remove("btn-primary"); btn.classList.add("btn-dark");
+      info.style.display = "block";
+    } else {
+      btn.innerHTML = "📡 Activar GPS del celular";
+      btn.classList.add("btn-primary"); btn.classList.remove("btn-dark");
+    }
+  }
+  function startGpsWatch() {
+    var info = $("tGpsInfo");
+    if (!("geolocation" in navigator)) {
+      info.style.display = "block";
+      info.textContent = "⚠ Tu navegador no soporta GPS.";
+      return;
+    }
+    if (gpsOn) return;
+    gpsOn = true; gpsUI();
+    info.textContent = "Buscando señal GPS…";
+    watchId = navigator.geolocation.watchPosition(function (pos) {
+      lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      info.textContent = "📡 " + lastFix.lat.toFixed(6) + ", " + lastFix.lng.toFixed(6) +
+        " · precisión ±" + Math.round(pos.coords.accuracy) + " m";
+      if (running && window.TRPTrack) {
+        TRPTrack.push(pos.coords.latitude, pos.coords.longitude, pos.coords.altitude, Date.now(), pos.coords.accuracy);
+        trackLivePaint();
+      }
+    }, function () {
+      info.textContent = "⚠ No se pudo obtener el GPS. Revisa los permisos del navegador.";
+    }, { enableHighAccuracy: true });
+  }
+  function stopGpsWatch() {
+    var info = $("tGpsInfo");
+    gpsOn = false; gpsUI();
+    info.style.display = "none"; info.textContent = "—"; lastFix = null;
+    if (watchId !== null && "geolocation" in navigator) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  }
+  $("tBtnGps").addEventListener("click", function () {
+    if (gpsOn) stopGpsWatch(); else startGpsWatch();
+  });
+
+  setState("En espera");
+  render();
+  /* GPS por defecto: se activa solo al abrir (buena UX para olvidadizos).
+     Si el navegador lo bloquea, queda el botón manual. */
+  try { startGpsWatch(); } catch (e) {}
+})();
+</script>
+</body>
+</html>

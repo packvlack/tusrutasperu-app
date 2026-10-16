@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking — TUSRUTASPERU</title>
+<meta name="description" content="Rankings oficiales: circuito completo más rápido, récords por checkpoint y conquistadores totales de Huaral.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d8ff00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">◈</span> TUSRUTASPERU</a>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Inicio</a>
+    <a href="lugares.html">Lugares</a>
+    <a href="circuito.html">Circuito</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="competencia.html" class="nav-cta">Competir →</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
+</header>
+
+<section class="page-head">
+  <span class="head-index">🏆</span>
+  <div class="wrap">
+    <span class="kicker mono tag">◈ El palmarés oficial</span>
+    <h1 class="display-lg mt-2">AQUÍ MANDAN<br>LOS <span class="text-blood">TIEMPOS.</span></h1>
+    <p class="lead">El palmarés oficial, en tu dispositivo y contra todo el Perú: el circuito completo más rápido, el récord de cada checkpoint, la lista sagrada de conquistadores… y la contrarreloj de cada lugar, con partida en su comunidad.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:3rem;">
+  <div class="wrap" style="max-width:1000px;">
+
+    <div class="split mb-2" role="tablist" aria-label="Tipo de ranking" style="gap:.8rem;justify-content:flex-start;">
+      <button class="btn btn-dark" id="tabLocal">📱 Mi dispositivo</button>
+      <button class="btn" id="tabGlobal">🌐 Ranking global</button>
+    </div>
+
+    <div id="rankLocal">
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>🏆 Circuito completo · más rápido</h3><span class="tag">Oficial</span></div>
+      <table>
+        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
+        <tbody id="boardFull"></tbody>
+      </table>
+    </div>
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>⚡ Récord por checkpoint</h3><span class="tag">Parciales</span></div>
+      <table>
+        <thead><tr><th>#</th><th>Checkpoint</th><th>Mejor parcial</th><th>Corredor</th></tr></thead>
+        <tbody id="boardCps"></tbody>
+      </table>
+    </div>
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>👑 Conquistadores totales</h3><span class="tag">12/12</span></div>
+      <table>
+        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th></tr></thead>
+        <tbody id="boardConq"></tbody>
+      </table>
+      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">Solo entran quienes completaron los 12 checkpoints en un mismo intento. El resto, a entrenar.</p>
+    </div>
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>⏱ Contrarreloj por lugar</h3><span class="tag">Desde la comunidad</span></div>
+      <div style="padding:1.1rem 1.4rem 0;">
+        <select id="selCronoPlace" aria-label="Lugar de la contrarreloj" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
+      </div>
+      <table>
+        <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo</th><th>Fecha</th></tr></thead>
+        <tbody id="boardCrono"></tbody>
+      </table>
+      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">El cronómetro arranca en la comunidad de partida y se detiene en el lugar. <a href="competencia.html?modo=crono">Corre tu contrarreloj →</a></p>
+    </div>
+    </div><!-- /rankLocal -->
+
+    <div id="rankGlobal" hidden>
+      <div class="board reveal mb-2">
+        <div class="board-head"><h3>🌐 Circuito completo · global</h3><span class="tag">Todo el Perú</span></div>
+        <table>
+          <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo total</th><th>Fecha</th><th></th></tr></thead>
+          <tbody id="boardGlobalFull"></tbody>
+        </table>
+        <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);" id="globalFullNote"></p>
+      </div>
+
+      <div class="board reveal mb-2">
+        <div class="board-head"><h3>🌐 Contrarreloj por lugar · global</h3><span class="tag">Todo el Perú</span></div>
+        <div style="padding:1.1rem 1.4rem 0;">
+          <select id="selGlobalCrono" aria-label="Lugar de la contrarreloj global" style="width:100%;padding:.8rem 1rem;font-size:1rem;font-family:inherit;"></select>
+        </div>
+        <table>
+          <thead><tr><th>Pos</th><th>Corredor</th><th>Tiempo</th><th>Fecha</th><th></th></tr></thead>
+          <tbody id="boardGlobalCrono"></tbody>
+        </table>
+        <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);" id="globalCronoNote"></p>
+      </div>
+    </div><!-- /rankGlobal -->
+
+    <div class="split mt-3 reveal">
+      <a href="competencia.html" class="btn btn-danger btn-big">Quiero entrar al ranking →</a>
+      <button class="btn btn-ghost btn-small" id="btnWipe">Borrar mis tiempos locales</button>
+    </div>
+    <p class="mono mt-2" style="font-size:.75rem;color:#777;">Los tiempos se guardan en tu dispositivo. Las filas marcadas “demo” son datos de demostración.</p>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú.</p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
+        <p class="mt-2"><a href="https://www.tiktok.com/@tusrutas" target="_blank" rel="noopener">TikTok · @tusrutas</a><br><a href="https://www.facebook.com/TusRutasPeru/" target="_blank" rel="noopener">Facebook · TusRutasPeru</a><br><a href="https://tusrutasperu.com/" target="_blank" rel="noopener">tusrutasperu.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
+      <span>Temporada 01 · v2.9 <a href="prueba.html" title="Modo prueba" style="opacity:.5;text-decoration:none;">🧪</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/global.js"></script>
+<script>
+(function () {
+  const demo = r => r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : '';
+
+  const full = TRPRanking.all();
+  document.getElementById("boardFull").innerHTML = full.length
+    ? full.map((r, i) => `<tr class="rank-${i + 1}">
+        <td><span class="pos">${i + 1}</span></td>
+        <td><strong>${TRPEscape(r.runner)}</strong>${demo(r)}</td>
+        <td class="mono"><strong>${TRP.formatMs(r.totalMs)}</strong></td>
+        <td class="mono">${r.date || "—"}</td>
+      </tr>`).join("")
+    : `<tr><td colspan="4" class="center" style="padding:2rem;">Nadie ha terminado aún. <a href="competencia.html">Sé el primero →</a></td></tr>`;
+
+  const best = TRPRanking.bestByCheckpoint();
+  document.getElementById("boardCps").innerHTML = TRP.checkpoints().map((p, i) => {
+    const b = best[p.slug];
+    return `<tr>
+      <td><span class="pos" style="font-size:1rem;">${i + 1}</span></td>
+      <td><a href="lugar.html?id=${p.slug}" style="color:inherit;">${p.nombre}</a></td>
+      <td class="mono"><strong>${b ? TRP.formatMsShort(b.ms) : "—"}</strong></td>
+      <td>${b ? TRPEscape(b.runner) : '<span style="color:#999;">Vacante</span>'}</td>
+    </tr>`;
+  }).join("");
+
+  const conq = TRPRanking.conquistadores();
+  document.getElementById("boardConq").innerHTML = conq.length
+    ? conq.map((r, i) => `<tr class="rank-${i + 1}">
+        <td><span class="pos">${i + 1}</span></td>
+        <td><strong>${TRPEscape(r.runner)}</strong>${demo(r)}</td>
+        <td class="mono"><strong>${TRP.formatMs(r.totalMs)}</strong></td>
+        <td class="mono">${r.date || "—"}</td>
+      </tr>`).join("")
+    : `<tr><td colspan="4" class="center" style="padding:2rem;">La lista sagrada está vacía. Todavía.</td></tr>`;
+
+  document.getElementById("btnWipe").addEventListener("click", () => {
+    if (confirm("¿Borrar tus tiempos guardados en este dispositivo?")) {
+      TRPRanking.clearMine();
+      location.reload();
+    }
+  });
+
+  /* ----- Contrarreloj por lugar ----- */
+  const sel = document.getElementById("selCronoPlace");
+  sel.innerHTML = TRP.PLACES.map((p, i) =>
+    `<option value="${p.slug}">${String(i + 1).padStart(2, "0")} · ${p.nombre} — partida: ${p.partida.nombre}</option>`).join("");
+  function renderCrono() {
+    const rows = TRPRanking.cronoByPlace(sel.value);
+    document.getElementById("boardCrono").innerHTML = rows.length
+      ? rows.map((r, i) => `<tr class="rank-${i + 1}">
+          <td><span class="pos">${i + 1}</span></td>
+          <td><strong>${TRPEscape(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
+          <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
+          <td class="mono">${r.date || "—"}</td>
+        </tr>`).join("")
+      : `<tr><td colspan="4" class="center" style="padding:2rem;">Sin marcas todavía. <a href="competencia.html?modo=crono&lugar=${sel.value}">Sé el primero →</a></td></tr>`;
+  }
+  sel.addEventListener("change", renderCrono);
+  renderCrono();
+
+  /* ----- Pestañas Local / Global (v2.0) ----- */
+  const tabLocal = document.getElementById("tabLocal");
+  const tabGlobal = document.getElementById("tabGlobal");
+  let globalLoaded = false;
+  let lastCircuitRows = [], lastCronoRows = [];
+  function setTab(g) {
+    document.getElementById("rankLocal").hidden = g;
+    document.getElementById("rankGlobal").hidden = !g;
+    tabLocal.classList.toggle("btn-dark", !g);
+    tabGlobal.classList.toggle("btn-dark", g);
+    if (g && !globalLoaded) loadGlobal();
+  }
+  tabLocal.addEventListener("click", () => setTab(false));
+  tabGlobal.addEventListener("click", () => setTab(true));
+
+  const gsel = document.getElementById("selGlobalCrono");
+  gsel.innerHTML = TRP.PLACES.map((p, i) =>
+    `<option value="${p.slug}">${String(i + 1).padStart(2, "0")} · ${p.nombre}</option>`).join("");
+  gsel.addEventListener("change", () => { if (globalLoaded) renderGlobalCrono(); });
+
+  /* ---------- Reportar tiempos sospechosos ---------- */
+  async function onReportClick(e) {
+    const b = e.target.closest("[data-rep]");
+    if (!b) return;
+    const [tabla, idx] = b.dataset.rep.split(":");
+    const rows = tabla === "crono" ? lastCronoRows : lastCircuitRows;
+    const r = rows[Number(idx)];
+    if (!r) return;
+    const reason = prompt(`Reportar el tiempo de "${r.runner}" como sospechoso.\nMotivo (opcional):`, "");
+    if (reason === null) return; // canceló
+    b.disabled = true;
+    try {
+      await TRPGlobal.report({
+        tabla, runner: r.runner,
+        refMs: tabla === "crono" ? r.ms : r.total_ms,
+        slug: tabla === "crono" ? document.getElementById("selGlobalCrono").value : null,
+        reason
+      });
+      TRPToast.show("🚩 Reporte enviado. Lo revisaremos.");
+    } catch (err) {
+      b.disabled = false;
+      TRPToast.show("No se pudo enviar el reporte. Revisa tu conexión.");
+    }
+  }
+  document.getElementById("boardGlobalFull").addEventListener("click", onReportClick);
+  document.getElementById("boardGlobalCrono").addEventListener("click", onReportClick);
+
+  async function loadGlobal() {
+    const note1 = document.getElementById("globalFullNote");
+    const demoTag = r => r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : "";
+    const verdictTag = r => r.verdict === "ok"
+      ? ' <span class="tag" style="font-size:.6rem;background:var(--acid);">✓ GPS</span>'
+      : (r.verdict === "revisar" ? ' <span class="tag" style="font-size:.6rem;background:#ffb703;">revisión</span>' : "");
+    if (!TRPGlobal.configured()) {
+      document.getElementById("boardGlobalFull").innerHTML =
+        `<tr><td colspan="4" class="center" style="padding:2rem;">El ranking global se activa pronto. Tus tiempos locales siguen guardados en tu dispositivo.</td></tr>`;
+      document.getElementById("boardGlobalCrono").innerHTML =
+        `<tr><td colspan="4" class="center" style="padding:2rem;">El ranking global se activa pronto.</td></tr>`;
+      note1.textContent = "Próximamente: una sola tabla para todo el Perú.";
+      document.getElementById("globalCronoNote").textContent = "";
+      globalLoaded = true;
+      return;
+    }
+    try {
+      const rows = await TRPGlobal.circuitBoard();
+      lastCircuitRows = rows;
+      document.getElementById("boardGlobalFull").innerHTML = rows.length
+        ? rows.map((r, i) => `<tr class="rank-${i + 1}">
+            <td><span class="pos">${i + 1}</span></td>
+            <td><strong>${TRPEscape(r.runner)}</strong>${demoTag(r)}${verdictTag(r)}</td>
+            <td class="mono"><strong>${TRP.formatMs(r.total_ms)}</strong></td>
+            <td class="mono">${r.date || "—"}</td>
+            <td><button class="btn btn-ghost btn-small" data-rep="circuit:${i}" title="Reportar tiempo sospechoso" style="padding:.2rem .5rem;">🚩</button></td></tr>`).join("")
+        : `<tr><td colspan="5" class="center" style="padding:2rem;">Nadie ha publicado todavía. <a href="competencia.html">Sé el primero →</a></td></tr>`;
+      note1.textContent = `Tabla global en vivo · ${rows.length} tiempos publicados.`;
+    } catch (e) {
+      document.getElementById("boardGlobalFull").innerHTML =
+        `<tr><td colspan="4" class="center" style="padding:2rem;">No se pudo cargar la tabla global. Revisa tu conexión.</td></tr>`;
+      note1.textContent = "";
+    }
+    await renderGlobalCrono();
+    globalLoaded = true;
+  }
+
+  async function renderGlobalCrono() {
+    const tb = document.getElementById("boardGlobalCrono");
+    const note2 = document.getElementById("globalCronoNote");
+    const demoTag = r => r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : "";
+    const verdictTag = r => r.verdict === "ok"
+      ? ' <span class="tag" style="font-size:.6rem;background:var(--acid);">✓ GPS</span>'
+      : (r.verdict === "revisar" ? ' <span class="tag" style="font-size:.6rem;background:#ffb703;">revisión</span>' : "");
+    tb.innerHTML = `<tr><td colspan="4" class="center" style="padding:1.5rem;">Cargando…</td></tr>`;
+    try {
+      const rows = await TRPGlobal.cronoBoard(gsel.value);
+      lastCronoRows = rows;
+      tb.innerHTML = rows.length
+        ? rows.map((r, i) => `<tr class="rank-${i + 1}">
+            <td><span class="pos">${i + 1}</span></td>
+            <td><strong>${TRPEscape(r.runner)}</strong>${demoTag(r)}${verdictTag(r)}</td>
+            <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
+            <td class="mono">${r.date || "—"}</td>
+            <td><button class="btn btn-ghost btn-small" data-rep="crono:${i}" title="Reportar tiempo sospechoso" style="padding:.2rem .5rem;">🚩</button></td></tr>`).join("")
+        : `<tr><td colspan="5" class="center" style="padding:2rem;">Sin tiempos publicados en este lugar. <a href="competencia.html?modo=crono&lugar=${gsel.value}">Sé el primero →</a></td></tr>`;
+      const p = TRP.place(gsel.value);
+      note2.textContent = `Global · ${p.nombre} (partida: ${p.partida.nombre}) · ${rows.length} tiempos.`;
+    } catch (e) {
+      tb.innerHTML = `<tr><td colspan="4" class="center" style="padding:2rem;">No se pudo cargar. Revisa tu conexión.</td></tr>`;
+      note2.textContent = "";
+    }
+  }
+})();
+</script>
+</body>
+</html>
