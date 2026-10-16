@@ -112,6 +112,7 @@
         ? "El GPS habilitará el arranque al llegar a la comunidad."
         : "Coordenada de partida por verificar en campo: el arranque será manual.");
     $("crPanelGps").style.opacity = "1";
+    $("crBtnDemo").textContent = pt.nombre ? `Modo demo: simular partida en ${pt.nombre}` : "Modo demo: simular partida";
   }
 
   /* ---------- Tabla de mejores tiempos del lugar ---------- */
@@ -209,6 +210,9 @@
     const ready = state.runner && p && state.gpsOn && !state.racing && !state.finished &&
       (state.demo || state.inStartZone || noFence);
     $("crBtnStart").disabled = !ready;
+    $("crBtnStart").innerHTML = (p && p.partida && p.partida.nombre)
+      ? `🏁 Arrancar desde ${esc(p.partida.nombre)}`
+      : "🏁 Arrancar";
     if (state.racing || state.finished) return;
     let msg;
     if (!p) msg = "Elige un lugar y acércate a su comunidad.";
