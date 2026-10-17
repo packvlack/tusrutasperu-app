@@ -50,7 +50,7 @@
   <nav class="main-nav" id="mainNav">
     <a href="index.html">Inicio</a>
     <a href="lugares.html">Lugares</a>
-    <a href="circuito.html">12 Treks</a>
+    <a href="circuito.html">Circuito</a>
     <a href="ranking.html">Ranking</a>
     <a href="competencia.html" class="nav-cta">Competir →</a>
   </nav>
@@ -62,7 +62,7 @@
   <div class="wrap">
     <span class="kicker mono tag" style="background:var(--acid);color:var(--ink);">🧪 Modo prueba · solo Paco</span>
     <h1 class="display-lg mt-2">ZONA DE<br>PRUEBAS<span class="text-acid">.</span></h1>
-    <p class="lead">Registra una ruta (por ejemplo tu casa → tu trabajo), corre el cronómetro y guarda el resultado. Todo lo que hagas aquí es <strong>ficticio</strong>: no toca los rankings reales ni el ranking global. Cuando verifiques que todo funciona, avísame y elimino este apartado.</p>
+    <p class="lead">Registra una ruta (por ejemplo tu casa → tu trabajo), mide tu tiempo con el cronómetro y guarda el resultado. Todo lo que hagas aquí es <strong>ficticio</strong>: no toca los rankings reales ni el ranking global. Cuando verifiques que todo funciona, avísame y elimino este apartado.</p>
   </div>
 </section>
 
@@ -88,7 +88,7 @@
   <!-- 02 · Cronómetro -->
   <div class="card reveal mt-3">
     <span class="tag">02 · Cronómetro</span>
-    <h2 class="display-sm mt-2">Corre tu ruta</h2>
+    <h2 class="display-sm mt-2">Trekkea tu ruta</h2>
     <div class="chrono mt-2">
       <span class="chrono-status" id="tStatus">En espera</span>
       <div class="chrono-time" id="tTime">00:00:00</div>
@@ -114,7 +114,7 @@
     <p class="lead" style="font-size:1rem;">Cada vez que terminas una ruta, el resultado aparece aquí. Así verificas que el guardado funciona.</p>
     <div class="board mt-2">
       <div class="board-head"><span>🧪 Registros de prueba</span><span class="tag">Solo local</span></div>
-      <div id="tBoard"><p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Corre tu primera ruta. →</p></div>
+      <div id="tBoard"><p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Trekkea tu primera ruta. →</p></div>
     </div>
     <button class="btn btn-danger btn-small mt-2" id="tBtnClear">🗑 Borrar todos los registros de prueba</button>
   </div>
@@ -153,11 +153,11 @@
     <div class="footer-grid">
       <div>
         <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
-        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú. Corre la ruta, marca tu tiempo, conquista el ranking.</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú. Trekkea la ruta, marca tu tiempo, conquista el ranking.</p>
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
-        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">12 Treks</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">Circuito</a><br><a href="ranking.html">Ranking</a><br><a href="competencia.html">Competir</a></p>
       </div>
       <div>
         <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
@@ -166,7 +166,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
-      <span>Temporada 01 · v2.13</span>
+      <span>Temporada 01 · v2.12</span>
     </div>
   </div>
 </footer>
@@ -221,7 +221,7 @@
   function render() {
     var runs = load(), box = $("tBoard");
     if (!runs.length) {
-      box.innerHTML = '<p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Corre tu primera ruta. →</p>';
+      box.innerHTML = '<p class="mono" style="padding:1rem;color:#888;">Aún no hay registros. Trekkea tu primera ruta. →</p>';
       return;
     }
     box.innerHTML = runs.map(function (r, i) {
