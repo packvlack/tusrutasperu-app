@@ -1,0 +1,6 @@
+# TUSRUTASPERU — URLs limpias para la app
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# /app/lugar/<slug>/ -> lugar.html?id=<slug> (reescritura interna; la URL visible no cambia)
+RewriteRule ^lugar/([a-z0-9-]+)/?$ lugar.html?id=$1 [L,QSA]
+</IfModule>

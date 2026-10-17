@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/app/">
 <title>Lugar — TUSRUTASPERU</title>
 <meta name="description" content="Ficha del lugar en Huaral: historia, datos de trekking, dificultad y cómo llegar. TUSRUTASPERU.">
-<link rel="canonical" href="https://tusrutasperu.com/app/lugar.html">
+<link rel="canonical" href="https://tusrutasperu.com/app/lugar/">
 <meta property="og:site_name" content="TUSRUTASPERU">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_PE">
-<meta property="og:url" content="https://tusrutasperu.com/app/lugar.html">
+<meta property="og:url" content="https://tusrutasperu.com/app/lugar/">
 <meta property="og:title" content="Lugar — TUSRUTASPERU">
 <meta property="og:description" content="Ficha del lugar en Huaral: historia, datos de trekking, dificultad y cómo llegar. TUSRUTASPERU.">
 <meta property="og:image" content="https://tusrutasperu.com/app/assets/img/hero-poster.webp">
@@ -74,7 +75,11 @@
 <script>
 (function () {
   const params = new URLSearchParams(location.search);
-  const slug = params.get("id");
+  let slug = params.get("id");
+  if (!slug) {
+    const m = location.pathname.match(/\/lugar\/([a-z0-9-]+)\/?$/);
+    if (m) slug = m[1];
+  }
   const p = TRP.place(slug);
   const root = document.getElementById("lugarRoot");
 
@@ -99,12 +104,14 @@
     setMeta('meta[name="twitter:title"]', p.nombre + " — TUSRUTASPERU");
     setMeta('meta[name="twitter:description"]', d);
     if (p.img) {
-      var abs = new URL(p.img, location.href).href;
+      var abs = new URL(p.img, document.baseURI).href;
       setMeta('meta[property="og:image"]', abs);
       setMeta('meta[name="twitter:image"]', abs);
     }
     var link = document.querySelector('link[rel="canonical"]');
-    if (link) link.setAttribute("href", "https://tusrutasperu.com/app/lugar.html?id=" + p.slug);
+    var cleanUrl = "https://tusrutasperu.com/app/lugar/" + p.slug + "/";
+    if (link) link.setAttribute("href", cleanUrl);
+    setMeta('meta[property="og:url"]', cleanUrl);
   })();
   const idx = TRP.CIRCUIT.indexOf(p.slug);
   const prev = idx > 0 ? TRP.place(TRP.CIRCUIT[idx - 1]) : null;
@@ -171,8 +178,8 @@
       </div>` : ""}
 
       <div class="lugar-nav">
-        ${prev ? `<a href="lugar.html?id=${prev.slug}" class="btn">← ${prev.nombre}</a>` : `<span></span>`}
-        ${next ? `<a href="lugar.html?id=${next.slug}" class="btn btn-primary">${next.nombre} →</a>` : `<span></span>`}
+        ${prev ? `<a href="lugar/${prev.slug}/" class="btn">← ${prev.nombre}</a>` : `<span></span>`}
+        ${next ? `<a href="lugar/${next.slug}/" class="btn btn-primary">${next.nombre} →</a>` : `<span></span>`}
       </div>
 
       <div class="center mt-3">

@@ -224,7 +224,7 @@
   const grid = document.getElementById("featuredGrid");
   grid.innerHTML = picks.map((slug, i) => {
     const p = TRP.place(slug);
-    return `<a class="card reveal" data-delay="${i}" href="lugar.html?id=${p.slug}" style="text-decoration:none;color:inherit;">
+    return `<a class="card reveal" data-delay="${i}" href="lugar/${p.slug}/" style="text-decoration:none;color:inherit;">
       <div class="card-img"><span class="card-num">${p.esMeta ? "🏆" : "0" + (i + 1)}</span><img src="${p.img}" alt="${p.alt || p.nombre}" loading="lazy"></div>
       <div class="card-body">
         <span class="tag">${p.tipoLabel}</span>

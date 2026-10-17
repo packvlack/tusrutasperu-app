@@ -118,7 +118,7 @@
     const list = TRP.CIRCUIT.map(s => TRP.place(s)).filter(p => filter === "todos" || p.tipo === filter);
     grid.innerHTML = list.map((p) => {
       const idx = TRP.CIRCUIT.indexOf(p.slug) + 1;
-      return `<a class="card reveal in" href="lugar.html?id=${p.slug}" style="text-decoration:none;color:inherit;">
+      return `<a class="card reveal in" href="lugar/${p.slug}/" style="text-decoration:none;color:inherit;">
         <div class="card-img">
           <span class="card-num">${p.esMeta ? "🏆" : String(idx).padStart(2, "0")}</span>
           <img src="${p.img}" alt="${p.alt || p.nombre}" loading="lazy">
