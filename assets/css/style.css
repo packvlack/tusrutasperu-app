@@ -554,6 +554,9 @@ footer.site-footer a { color: var(--acid); }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 960px) {
+  .manifiesto { grid-template-columns: 1fr; gap: 1.5rem; }
+  .manifiesto-side { text-align: left; }
+  .mega-num { font-size: clamp(4.5rem, 22vw, 7rem); }
   .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -928,11 +931,35 @@ footer.site-footer a { color: var(--acid); }
 .stats-band div:nth-child(1) strong { color: var(--blood); }
 
 /* ---------- MANIFIESTO ---------- */
+.manifiesto {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 3rem;
+  align-items: center;
+}
 .manifiesto p {
   font-size: clamp(1.4rem, 3.2vw, 2.3rem);
   font-weight: 700;
   line-height: 1.35;
   max-width: 22ch;
+}
+.manifiesto-side { text-align: center; }
+.mega-num {
+  display: block;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(7rem, 20vw, 15rem);
+  line-height: .85;
+  color: var(--acid);
+  -webkit-text-stroke: 3px #141414;
+  paint-order: stroke fill;
+}
+.mega-cap {
+  display: block;
+  margin-top: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  letter-spacing: .18em;
+  font-size: .95rem;
 }
 .manifiesto p .hl { background: var(--acid); padding: 0 .25em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .manifiesto p .hl-blood { background: var(--blood); color: #fff; padding: 0 .25em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
