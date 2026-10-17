@@ -159,7 +159,7 @@
     // pie
     x.fillStyle = ACID;
     x.font = `30px ${MONO}`;
-    x.fillText("CORRE LA RUTA · CONQUISTA HUARAL", W / 2, H - 70);
+    x.fillText("TREKKEA LA RUTA · CONQUISTA HUARAL", W / 2, H - 70);
 
     return c;
   }
