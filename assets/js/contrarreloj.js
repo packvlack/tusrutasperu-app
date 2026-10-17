@@ -199,16 +199,29 @@
     };
     navigator.geolocation.getCurrentPosition(onOk, onErr, { enableHighAccuracy: true, timeout: 20000 });
     if (state.watchId == null) {
-      state.watchId = navigator.geolocation.watchPosition(onOk, onErr, { enableHighAccuracy: true, maximumAge: 5000 });
+      state.watchId = navigator.geolocation.watchPosition(onOk, onErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 });
     }
     state.gpsOn = true;
+    requestWakeLock();
     $("crPanelChrono").style.opacity = "1";
     refreshStart();
   }
 
+  var _wakeLock = null;
+  function requestWakeLock() {
+    try {
+      if ("wakeLock" in navigator && !_wakeLock) {
+        navigator.wakeLock.request("screen").then(function (l) { _wakeLock = l; }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function releaseWakeLock() {
+    try { if (_wakeLock) { _wakeLock.release(); _wakeLock = null; } } catch (e) {}
+  }
   function stopGps() {
     if (state.watchId != null) navigator.geolocation.clearWatch(state.watchId);
     state.watchId = null;
+    releaseWakeLock();
   }
 
   function refreshStart() {
