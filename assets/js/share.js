@@ -156,7 +156,9 @@
     x.fillText(`${d.date || ""} · ${SITE_URL}`, W / 2, y);
     y += 60;
 
-    // pie
+    // pie (se limpia la zona antes de dibujar: anti-fantasma)
+    x.fillStyle = INK;
+    x.fillRect(0, H - 116, W, 116);
     x.fillStyle = ACID;
     x.font = `30px ${MONO}`;
     x.fillText("TREKKEA LA RUTA · CONQUISTA HUARAL", W / 2, H - 70);
