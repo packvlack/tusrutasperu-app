@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tusrutasperu.com/app/sitemap.xml
