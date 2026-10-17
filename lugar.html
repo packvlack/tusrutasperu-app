@@ -4,7 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lugar — TUSRUTASPERU</title>
-<meta name="description" content="Ficha completa del lugar: historia, datos, dificultad y cómo llegar.">
+<meta name="description" content="Ficha del lugar en Huaral: historia, datos de trekking, dificultad y cómo llegar. TUSRUTASPERU.">
+<link rel="canonical" href="https://tusrutasperu.com/app/lugar.html">
+<meta property="og:site_name" content="TUSRUTASPERU">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_PE">
+<meta property="og:url" content="https://tusrutasperu.com/app/lugar.html">
+<meta property="og:title" content="Lugar — TUSRUTASPERU">
+<meta property="og:description" content="Ficha del lugar en Huaral: historia, datos de trekking, dificultad y cómo llegar. TUSRUTASPERU.">
+<meta property="og:image" content="https://tusrutasperu.com/app/assets/img/hero-poster.webp">
+<meta property="og:image:alt" content="TUSRUTASPERU — Trekkea la ruta. Conquista Huaral.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lugar — TUSRUTASPERU">
+<meta name="twitter:description" content="Ficha del lugar en Huaral: historia, datos de trekking, dificultad y cómo llegar. TUSRUTASPERU.">
+<meta name="twitter:image" content="https://tusrutasperu.com/app/assets/img/hero-poster.webp">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d8ff00">
 <meta name="mobile-web-app-capable" content="yes">
@@ -76,6 +89,23 @@
   }
 
   document.title = p.nombre + " — TUSRUTASPERU";
+  (function () {
+    var d = "Trekkea " + p.nombre + " en Huaral, Lima: " + (p.tipoLabel || "lugar") +
+      ". Datos de trekking, dificultad y cómo llegar en TUSRUTASPERU.";
+    function setMeta(sel, val) { var m = document.querySelector(sel); if (m) m.setAttribute("content", val); }
+    setMeta('meta[name="description"]', d);
+    setMeta('meta[property="og:title"]', p.nombre + " — TUSRUTASPERU");
+    setMeta('meta[property="og:description"]', d);
+    setMeta('meta[name="twitter:title"]', p.nombre + " — TUSRUTASPERU");
+    setMeta('meta[name="twitter:description"]', d);
+    if (p.img) {
+      var abs = new URL(p.img, location.href).href;
+      setMeta('meta[property="og:image"]', abs);
+      setMeta('meta[name="twitter:image"]', abs);
+    }
+    var link = document.querySelector('link[rel="canonical"]');
+    if (link) link.setAttribute("href", "https://tusrutasperu.com/app/lugar.html?id=" + p.slug);
+  })();
   const idx = TRP.CIRCUIT.indexOf(p.slug);
   const prev = idx > 0 ? TRP.place(TRP.CIRCUIT[idx - 1]) : null;
   const next = idx < TRP.CIRCUIT.length - 1 ? TRP.place(TRP.CIRCUIT[idx + 1]) : null;
