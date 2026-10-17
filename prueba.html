@@ -32,9 +32,10 @@
   align-items:center;justify-content:center;padding:1rem;}
 #tModal.open{display:flex;}
 #tModal .tmodal-card{background:var(--paper);color:var(--ink);border:3px solid var(--ink);
-  box-shadow:8px 8px 0 var(--acid);max-width:560px;width:100%;padding:3.4rem 1.6rem 1.6rem;
+  box-shadow:8px 8px 0 var(--acid);max-width:560px;width:100%;padding:1.4rem 1.6rem 1.6rem;
   position:relative;max-height:88vh;overflow:auto;}
-#tModal .tmodal-close{position:absolute;top:1rem;right:1rem;width:2.6rem;height:2.6rem;
+#tModal .tmodal-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.5rem;}
+#tModal .tmodal-close{position:static;flex-shrink:0;width:2.6rem;height:2.6rem;
   background:var(--blood);color:#fff;border:var(--border);font-family:var(--font-display);
   font-size:1.2rem;cursor:pointer;z-index:2;}
 .t-stat-big{font-family:var(--font-display);font-size:2.3rem;line-height:1.05;}
@@ -130,8 +131,10 @@
 <!-- MODAL DETALLE DE REGISTRO -->
 <div id="tModal" role="dialog" aria-modal="true" aria-label="Detalle del registro">
   <div class="tmodal-card">
-    <button class="tmodal-close" data-tclose aria-label="Cerrar">✕</button>
-    <span class="kicker mono tag">🧪 Detalle de prueba</span>
+    <div class="tmodal-head">
+      <span class="kicker mono tag">🧪 Detalle de prueba</span>
+      <button class="tmodal-close" data-tclose aria-label="Cerrar">✕</button>
+    </div>
     <h2 class="display-sm mt-2" id="tDRoute">—</h2>
     <div class="split mt-2" style="gap:2.2rem;">
       <div>
@@ -287,7 +290,7 @@
   function trackLivePaint() {
     if (!window.TRPTrack) return;
     var s = TRPTrack.stats();
-    $("tTrackLive").textContent = "📏 " + TRPTrack.fmtKm(s.km) + " km · ⛰️ +" + s.gainM + " m";
+    $("tTrackLive").textContent = "📏 " + TRPTrack.fmtKm(s.km) + " km · ⛰️ +" + s.gainM + " m · 🛰️ " + s.points + " pts";
   }
   $("tBtnStart").addEventListener("click", function () {
     if (!running) { t0 = performance.now(); running = true; tick = setInterval(paint, 100); trackLiveReset(); }
@@ -354,6 +357,20 @@
       btn.classList.add("btn-primary"); btn.classList.remove("btn-dark");
     }
   }
+  var _wakeLock = null;
+  function requestWakeLock() {
+    try {
+      if ("wakeLock" in navigator && !_wakeLock) {
+        navigator.wakeLock.request("screen").then(function (l) { _wakeLock = l; }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function releaseWakeLock() {
+    try { if (_wakeLock) { _wakeLock.release(); _wakeLock = null; } } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && typeof gpsOn !== "undefined" && gpsOn) requestWakeLock();
+  });
   function startGpsWatch() {
     var info = $("tGpsInfo");
     if (!("geolocation" in navigator)) {
@@ -363,6 +380,7 @@
     }
     if (gpsOn) return;
     gpsOn = true; gpsUI();
+    requestWakeLock();
     info.textContent = "Buscando señal GPS…";
     watchId = navigator.geolocation.watchPosition(function (pos) {
       lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -374,11 +392,12 @@
       }
     }, function () {
       info.textContent = "⚠ No se pudo obtener el GPS. Revisa los permisos del navegador.";
-    }, { enableHighAccuracy: true });
+    }, { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 });
   }
   function stopGpsWatch() {
     var info = $("tGpsInfo");
     gpsOn = false; gpsUI();
+    releaseWakeLock();
     info.style.display = "none"; info.textContent = "—"; lastFix = null;
     if (watchId !== null && "geolocation" in navigator) { navigator.geolocation.clearWatch(watchId); watchId = null; }
   }
