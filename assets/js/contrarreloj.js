@@ -172,7 +172,7 @@
     if (state.racing && window.TRPTrack) {
       const s = TRPTrack.push(latitude, longitude, pos.coords.altitude, Date.now(), pos.coords.accuracy);
       const tl = $("crTrackLive");
-      if (tl) tl.innerHTML = `📏 ${TRPTrack.fmtKm(s.km)} km · ⛰️ +${s.gainM} m <span style="color:#888;">· track GPS</span>`;
+      if (tl) tl.innerHTML = `📏 ${TRPTrack.fmtKm(s.km)} km · ⛰️ +${s.gainM} m · 🛰️ ${s.points} pts <span style="color:#888;">· deja la app abierta</span>`;
     }
     autoFinish(latitude, longitude);
   }
@@ -211,10 +211,18 @@
   function requestWakeLock() {
     try {
       if ("wakeLock" in navigator && !_wakeLock) {
-        navigator.wakeLock.request("screen").then(function (l) { _wakeLock = l; }).catch(function () {});
+        navigator.wakeLock.request("screen").then(function (l) {
+          _wakeLock = l;
+          l.addEventListener("release", function () { _wakeLock = null; });
+        }).catch(function () {});
       }
     } catch (e) {}
   }
+  /* Si el navegador suelta el wake lock (cambio de app, etc.), al volver
+     a esta pestaña en carrera se vuelve a pedir: pantalla encendida = GPS vivo. */
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && state.racing && !state.demo) requestWakeLock();
+  });
   function releaseWakeLock() {
     try { if (_wakeLock) { _wakeLock.release(); _wakeLock = null; } } catch (e) {}
   }
@@ -351,7 +359,22 @@
         ? `<div class="board mt-2" style="box-shadow:var(--shadow-sm);">
              <div class="board-head"><span>📡 Track GPS</span><span class="tag">${esc(trkLine)}</span></div>
              <div style="padding:1rem;">${TRPTrack.toSVG(640, 300)}
-             <p class="mono mt-2" style="font-size:.8rem;color:#666;">Desnivel +${trk.gainM} m / −${trk.lossM} m${trk.altMax != null ? " · Alt. máx " + trk.altMax + " m" : ""} · ${trk.points} puntos GPS</p>
+             ${(() => {
+               const kmT = trkA && trkA.km ? trkA.km : trk.km;
+               const ritmo = kmT >= 0.05 ? Math.floor(ms / kmT / 60000) + ":" + String(Math.floor(ms / kmT / 1000) % 60).padStart(2, "0") + " /km" : "—";
+               const cell = (v, l) => `<div style="border:2px solid #101010;padding:.5rem .25rem;text-align:center;"><strong style="display:block;font-size:1.15rem;line-height:1.1;">${v}</strong><small style="font-size:.62rem;letter-spacing:.08em;color:#666;">${l}</small></div>`;
+               return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem;">
+                 ${cell(TRPTrack.fmtKm(kmT) + " km", "DISTANCIA")}
+                 ${cell(TRP.formatMs(ms), "TIEMPO")}
+                 ${cell(ritmo, "RITMO MEDIO")}
+                 ${cell((trkA ? trkA.avgKmh : 0) + " km/h", "VEL. MEDIA")}
+                 ${cell((trkA ? trkA.maxSegKmh : 0) + " km/h", "VEL. MÁXIMA")}
+                 ${cell((trk.altMax != null ? trk.altMax + " m" : "—"), "ALT. MÁXIMA")}
+                 ${cell("+" + trk.gainM + " m", "DESNIVEL +")}
+                 ${cell("−" + trk.lossM + " m", "DESNIVEL −")}
+                 ${cell(trk.points, "PUNTOS GPS")}
+               </div>`;
+             })()}
              ${trkA && trkA.verdict === "ok" ? `<p class="mono mt-2" style="font-size:.8rem;color:#1a7f37;">✓ Track verificado (${trkA.avgKmh} km/h media)</p>` : ""}
              ${trkA && trkA.verdict === "revisar" ? `<p class="mono mt-2" style="font-size:.8rem;color:#9a6700;">⚠ Track marcado para revisión: ${esc(trkA.reasons.join(" · "))}</p>` : ""}
              ${trkA && trkA.verdict === "rechazado" ? `<p class="mono mt-2" style="font-size:.8rem;color:#b00020;">⛔ Track con anomalías: ${esc(trkA.reasons.join(" · "))}. No se puede publicar.</p>` : ""}</div>
@@ -418,8 +441,9 @@
     $("crChronoSub").textContent = `Trek reanudado: ${p.partida.nombre} → ${p.nombre}.`;
     if (!state.demo && TRPGps.supported()) {
       state.gpsOn = true;
+      requestWakeLock();
       state.watchId = navigator.geolocation.watchPosition(
-        (pos) => updateGpsUI(pos), () => {}, { enableHighAccuracy: true, maximumAge: 8000 });
+        (pos) => updateGpsUI(pos), () => {}, { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 });
     } else if (state.demo) {
       state.gpsOn = true;
       $("crGpsStatus").textContent = "Demo 📡";

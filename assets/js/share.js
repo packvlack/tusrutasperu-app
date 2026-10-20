@@ -91,7 +91,7 @@
     x.fillRect(W / 2 - tw / 2, y, tw, 72);
     x.fillStyle = INK;
     x.fillText(tag, W / 2, y + 49);
-    y += 150;
+    y += 178;
 
     // lugar (1 o 2 líneas, balanceadas)
     x.fillStyle = PAPER;
