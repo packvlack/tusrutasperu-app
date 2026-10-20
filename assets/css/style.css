@@ -554,6 +554,7 @@ footer.site-footer a { color: var(--acid); }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 960px) {
+  .site-header { background: var(--acid); }
   .manifiesto { grid-template-columns: 1fr; gap: 1.5rem; }
   .manifiesto-side { text-align: left; }
   .mega-num { font-size: clamp(4.5rem, 22vw, 7rem); }
