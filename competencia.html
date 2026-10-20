@@ -101,6 +101,7 @@
         <button class="btn btn-primary btn-big" id="crBtnStart" disabled>🏁 Arrancar</button>
         <button class="btn btn-danger" id="crBtnFinish" disabled>🏆 ¡Llegué a la meta!</button>
         <button class="btn btn-ghost" id="crBtnAbort" disabled>✕ Abandonar</button>
+        <button class="btn btn-ghost" id="crBtnPocket" disabled>🌙 Modo bolsillo</button>
       </div>
       <div class="board mt-3">
         <div class="board-head"><h3>⏱ Mejores tiempos · <span id="crBoardPlace">—</span></h3><span class="tag">Trek cronometrado</span></div>
@@ -172,6 +173,16 @@
     </div>
   </div>
 </footer>
+
+<!-- MODO BOLSILLO: pantalla negra, GPS grabando, mínimo consumo -->
+<div id="pocketMode" hidden>
+  <div class="pocket-inner">
+    <p class="pocket-dot">● GRABANDO GPS · NO BLOQUEES EL CELULAR</p>
+    <p class="pocket-time" id="pkTime">00:00:00</p>
+    <p class="pocket-stats" id="pkStats">📏 0.00 km · 🛰️ 0 pts</p>
+    <p class="pocket-hint" id="pkHint">Mantén presionada la pantalla 2 s para salir</p>
+  </div>
+</div>
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app.js"></script>

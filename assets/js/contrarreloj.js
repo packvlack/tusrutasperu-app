@@ -25,7 +25,8 @@
     startTime: 0,
     timerId: null,
     finished: false,
-    gpsErrorShown: false
+    gpsErrorShown: false,
+    pocket: false
   };
 
   const esc = (s) => window.TRPEscape ? TRPEscape(s) : String(s);
@@ -146,6 +147,11 @@
     const s = Math.floor(el / 1000);
     const p2 = (n) => String(n).padStart(2, "0");
     $("crChronoTime").textContent = `${p2(Math.floor(s / 3600))}:${p2(Math.floor((s % 3600) / 60))}:${p2(s % 60)}`;
+    if (state.pocket) {
+      const pt = $("pkTime"); if (pt) pt.textContent = $("crChronoTime").textContent;
+      const ps = $("pkStats");
+      if (ps && window.TRPTrack) { const ts = TRPTrack.stats(); ps.textContent = `📏 ${TRPTrack.fmtKm(ts.km)} km · ⛰️ +${ts.gainM} m · 🛰️ ${ts.points} pts`; }
+    }
   }
   function elapsed() { return Date.now() - state.startTime; }
   function fmtDist(d) {
@@ -223,6 +229,23 @@
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible" && state.racing && !state.demo) requestWakeLock();
   });
+  /* ---------- Modo bolsillo ----------
+     Pantalla negra (OLED casi no consume) con la app en primer plano:
+     el GPS sigue grabando sin que el navegador lo estrangule.
+     Salida con pulsación larga (anti toques accidentales en el bolsillo). */
+  function enterPocket() {
+    if (!state.racing) { TRPToast.show("Arranca el trek primero."); return; }
+    state.pocket = true;
+    const pm = $("pocketMode");
+    if (pm) pm.hidden = false;
+    requestWakeLock();
+  }
+  function exitPocket() {
+    if (!state.pocket) return;
+    state.pocket = false;
+    const pm = $("pocketMode");
+    if (pm) pm.hidden = true;
+  }
   function releaseWakeLock() {
     try { if (_wakeLock) { _wakeLock.release(); _wakeLock = null; } } catch (e) {}
   }
@@ -269,12 +292,14 @@
     $("crBtnStart").disabled = true;
     $("crBtnFinish").disabled = false;
     $("crBtnAbort").disabled = false;
+    $("crBtnPocket").disabled = false;
     $("crChronoSub").textContent = `Cronómetro corriendo desde ${state.place.partida.nombre}. ¡A por ${state.place.nombre}!`;
     TRPToast.show(`🏁 ¡Arrancaste en ${state.place.partida.nombre}!`);
   }
 
   function finish(how) {
     if (!state.racing || state.finished) return;
+    exitPocket();
     const ms = elapsed();
     const p = state.place;
     const trk = window.TRPTrack ? TRPTrack.stats() : null;
@@ -337,6 +362,7 @@
     $("crChronoStatus").classList.remove("live");
     $("crBtnFinish").disabled = true;
     $("crBtnAbort").disabled = true;
+    $("crBtnPocket").disabled = true;
 
     const top = TRPRanking.cronoByPlace(p.slug).slice(0, 5);
     $("metaTitle").innerHTML = `¡META!<br>${esc(p.nombre).toUpperCase()}`;
@@ -398,8 +424,10 @@
     const st = $("crChronoStatus");
     st.textContent = "En espera";
     st.classList.remove("live");
+    exitPocket();
     $("crBtnFinish").disabled = true;
     $("crBtnAbort").disabled = true;
+    $("crBtnPocket").disabled = true;
     $("crBtnGps").disabled = false;
     $("crGpsStatus").textContent = "Apagado";
     $("crDotGps").className = "gps-dot";
@@ -438,6 +466,7 @@
     $("crBtnStart").disabled = true;
     $("crBtnFinish").disabled = false;
     $("crBtnAbort").disabled = false;
+    $("crBtnPocket").disabled = false;
     $("crChronoSub").textContent = `Trek reanudado: ${p.partida.nombre} → ${p.nombre}.`;
     if (!state.demo && TRPGps.supported()) {
       state.gpsOn = true;
@@ -481,6 +510,31 @@
   $("crBtnStart").addEventListener("click", startRace);
   $("crBtnFinish").addEventListener("click", () => finish("manual"));
   $("crBtnAbort").addEventListener("click", abortRace);
+  $("crBtnPocket").addEventListener("click", enterPocket);
+  (function () {
+    const pm = $("pocketMode");
+    if (!pm) return;
+    const hint = $("pkHint");
+    let pressTimer = null;
+    function startPress(e) {
+      if (e) e.preventDefault();
+      if (hint) hint.textContent = "Sigue presionando para salir…";
+      pressTimer = setTimeout(function () {
+        pressTimer = null;
+        exitPocket();
+        TRPToast.show("Modo bolsillo desactivado.");
+      }, 1800);
+    }
+    function cancelPress() {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      if (hint) hint.textContent = "Mantén presionada la pantalla 2 s para salir";
+    }
+    pm.addEventListener("pointerdown", startPress);
+    pm.addEventListener("pointerup", cancelPress);
+    pm.addEventListener("pointerleave", cancelPress);
+    pm.addEventListener("pointercancel", cancelPress);
+    pm.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  })();
 
   $("crBtnResume").addEventListener("click", () => {
     const saved = loadRace();

@@ -1014,3 +1014,31 @@ footer.site-footer a { color: var(--acid); }
 @media (max-width: 480px) {
   .head-index { font-size: 3.2rem; opacity: .18; top: calc(72px + .6rem); }
 }
+
+/* ---------- MODO BOLSILLO ---------- */
+#pocketMode {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+#pocketMode[hidden] { display: none; }
+.pocket-inner { text-align: center; padding: 2rem; }
+.pocket-dot {
+  color: #2e7d32; font-family: 'Space Mono', monospace;
+  font-size: .8rem; letter-spacing: .15em; margin-bottom: 2rem;
+  animation: pocketPulse 2.4s ease-in-out infinite;
+}
+@keyframes pocketPulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+.pocket-time {
+  color: #3f7a44; font-family: 'Space Mono', monospace;
+  font-size: 3rem; font-weight: 700; line-height: 1;
+}
+.pocket-stats {
+  color: #2a5230; font-family: 'Space Mono', monospace;
+  font-size: 1rem; margin-top: 1.2rem;
+}
+.pocket-hint {
+  color: #22402a; font-family: 'Space Mono', monospace;
+  font-size: .78rem; margin-top: 3rem; letter-spacing: .05em;
+}
