@@ -100,6 +100,7 @@
         <button class="btn btn-dark" id="tBtnPause" disabled>⏸ Pausar</button>
         <button class="btn btn-primary" id="tBtnFinish" disabled>🏁 Terminar y guardar</button>
         <button class="btn btn-ghost" id="tBtnReset">↺ Reiniciar</button>
+        <button class="btn btn-ghost" id="tBtnPocket" disabled>🌙 Modo bolsillo</button>
       </div>
     </div>
     <div class="mt-3">
@@ -174,6 +175,16 @@
   </div>
 </footer>
 
+<!-- MODO BOLSILLO: pantalla negra, GPS grabando, mínimo consumo -->
+<div id="pocketMode" hidden>
+  <div class="pocket-inner">
+    <p class="pocket-dot">● GRABANDO GPS · NO BLOQUEES EL CELULAR</p>
+    <p class="pocket-time" id="pkTime">00:00:00</p>
+    <p class="pocket-stats" id="pkStats">📏 0.00 km · 🛰️ 0 pts</p>
+    <p class="pocket-hint" id="pkHint">Mantén presionada la pantalla 2 s para salir</p>
+  </div>
+</div>
+
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/track.js"></script>
@@ -197,7 +208,16 @@
     return p(Math.floor(s / 3600)) + ":" + p(Math.floor((s % 3600) / 60)) + ":" + p(s % 60);
   }
   function now() { return acc + (running ? performance.now() - t0 : 0); }
-  function paint() { $("tTime").textContent = fmt(now()); }
+  function paint() {
+    $("tTime").textContent = fmt(now());
+    if (tPocketOn) {
+      $("pkTime").textContent = $("tTime").textContent;
+      if (window.TRPTrack) {
+        var ts = TRPTrack.stats();
+        $("pkStats").textContent = "📏 " + TRPTrack.fmtKm(ts.km) + " km · ⛰️ +" + ts.gainM + " m · 🛰️ " + ts.points + " pts";
+      }
+    }
+  }
 
   function setState(st) {
     var el = $("tStatus");
@@ -208,6 +228,7 @@
     $("tBtnPause").disabled = st !== "Corriendo";
     $("tBtnPause").textContent = st === "Pausado" ? "▶ Reanudar" : "⏸ Pausar";
     $("tBtnFinish").disabled = !(st === "Corriendo" || st === "Pausado");
+    $("tBtnPocket").disabled = st !== "Corriendo";
   }
 
   function load() {
@@ -309,6 +330,7 @@
     }
   });
   $("tBtnFinish").addEventListener("click", function () {
+    exitTPocket();
     if (running) { acc += performance.now() - t0; running = false; }
     clearInterval(tick); paint();
     var ms = now();
@@ -335,6 +357,7 @@
     $("tSub").textContent = "✔ Resultado guardado en tus registros de prueba.";
   });
   $("tBtnReset").addEventListener("click", function () {
+    exitTPocket();
     clearInterval(tick); running = false; acc = 0; paint(); setState("En espera");
     if (window.TRPTrack) { TRPTrack.reset(); }
     $("tTrackLive").textContent = "📏 — · ⛰️ —";
@@ -404,6 +427,42 @@
   $("tBtnGps").addEventListener("click", function () {
     if (gpsOn) stopGpsWatch(); else startGpsWatch();
   });
+
+  /* ---------- Modo bolsillo ----------
+     Pantalla negra con la app en primer plano: el GPS sigue grabando.
+     Salida con pulsación larga (anti toques accidentales). */
+  var tPocketOn = false;
+  function enterTPocket() {
+    if ($("tStatus").textContent !== "Corriendo") return;
+    tPocketOn = true;
+    $("pocketMode").hidden = false;
+    requestWakeLock();
+  }
+  function exitTPocket() {
+    if (!tPocketOn) return;
+    tPocketOn = false;
+    $("pocketMode").hidden = true;
+  }
+  $("tBtnPocket").addEventListener("click", enterTPocket);
+  (function () {
+    var pm = $("pocketMode");
+    var hint = $("pkHint");
+    var pressTimer = null;
+    function startPress(e) {
+      if (e) e.preventDefault();
+      hint.textContent = "Sigue presionando para salir…";
+      pressTimer = setTimeout(function () { pressTimer = null; exitTPocket(); }, 1800);
+    }
+    function cancelPress() {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      hint.textContent = "Mantén presionada la pantalla 2 s para salir";
+    }
+    pm.addEventListener("pointerdown", startPress);
+    pm.addEventListener("pointerup", cancelPress);
+    pm.addEventListener("pointerleave", cancelPress);
+    pm.addEventListener("pointercancel", cancelPress);
+    pm.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  })();
 
   setState("En espera");
   render();
