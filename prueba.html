@@ -384,9 +384,20 @@
   function requestWakeLock() {
     try {
       if ("wakeLock" in navigator && !_wakeLock) {
-        navigator.wakeLock.request("screen").then(function (l) { _wakeLock = l; }).catch(function () {});
+        navigator.wakeLock.request("screen").then(function (l) {
+          _wakeLock = l;
+          l.addEventListener("release", function () { _wakeLock = null; });
+        }).catch(function () { wlFailed(); });
       }
-    } catch (e) {}
+    } catch (e) { wlFailed(); }
+  }
+  /* Si el bloqueo de pantalla falla, el celular se apagará solo: avisar en
+     el overlay para que la prueba diga la verdad. */
+  function wlFailed() {
+    if (tPocketOn) {
+      var h = $("pkHint");
+      if (h) h.textContent = "⚠ Bloqueo de pantalla NO activo: el celular se apagará solo. Revisa permisos o ahorro de batería.";
+    }
   }
   function releaseWakeLock() {
     try { if (_wakeLock) { _wakeLock.release(); _wakeLock = null; } } catch (e) {}
@@ -437,6 +448,7 @@
     tPocketOn = true;
     $("pocketMode").hidden = false;
     requestWakeLock();
+    setTimeout(function () { if (tPocketOn && !_wakeLock) wlFailed(); }, 1000);
   }
   function exitTPocket() {
     if (!tPocketOn) return;
