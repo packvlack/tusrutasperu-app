@@ -220,9 +220,17 @@
         navigator.wakeLock.request("screen").then(function (l) {
           _wakeLock = l;
           l.addEventListener("release", function () { _wakeLock = null; });
-        }).catch(function () {});
+        }).catch(function () { wlFailed(); });
       }
-    } catch (e) {}
+    } catch (e) { wlFailed(); }
+  }
+  /* Si el bloqueo de pantalla falla, el celular se apagará solo y el GPS
+     se estrangula: avisar en el overlay para que la prueba diga la verdad. */
+  function wlFailed() {
+    if (state.pocket) {
+      const h = $("pkHint");
+      if (h) h.textContent = "⚠ Bloqueo de pantalla NO activo: el celular se apagará solo. Revisa permisos o ahorro de batería.";
+    }
   }
   /* Si el navegador suelta el wake lock (cambio de app, etc.), al volver
      a esta pestaña en carrera se vuelve a pedir: pantalla encendida = GPS vivo. */
@@ -239,6 +247,7 @@
     const pm = $("pocketMode");
     if (pm) pm.hidden = false;
     requestWakeLock();
+    setTimeout(function () { if (state.pocket && !_wakeLock) wlFailed(); }, 1000);
   }
   function exitPocket() {
     if (!state.pocket) return;
@@ -297,6 +306,25 @@
     TRPToast.show(`🏁 ¡Arrancaste en ${state.place.partida.nombre}!`);
   }
 
+  /* Top 10 del lugar con fotos (se re-renderiza al subir foto). */
+  let lastFinish = null;
+  function photoCell(r) {
+    if (r.photo) return `<img src="${r.photo}" alt="" style="width:2.2rem;height:2.2rem;object-fit:cover;border-radius:50%;border:2px solid #101010;vertical-align:middle;margin-right:.4rem;">`;
+    const ini = (r.runner || "?").trim().charAt(0).toUpperCase();
+    return `<span style="display:inline-block;width:2.2rem;height:2.2rem;line-height:2.2rem;text-align:center;border-radius:50%;background:var(--acid);border:2px solid #101010;font-weight:700;vertical-align:middle;margin-right:.4rem;">${esc(ini)}</span>`;
+  }
+  function renderMetaTop(p) {
+    const top = TRPRanking.cronoByPlace(p.slug).slice(0, 10);
+    $("metaTable").innerHTML =
+      `<thead><tr><th>#</th><th>Trekker</th><th>Tiempo</th><th>Fecha</th></tr></thead><tbody>` +
+      top.map((r, i) => `<tr class="rank-${i + 1}">
+        <td><span class="pos">${i + 1}</span></td>
+        <td>${photoCell(r)}<strong>${esc(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
+        <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
+        <td class="mono">${r.date || "—"}</td></tr>`).join("") +
+      `</tbody>`;
+  }
+
   function finish(how) {
     if (!state.racing || state.finished) return;
     exitPocket();
@@ -322,9 +350,13 @@
         date: new Date().toISOString().slice(0, 10)
       });
     }
+    /* Puesto en el ranking del lugar (para la tarjeta exportada). */
+    const rank = TRPRanking.cronoByPlace(p.slug).filter(r => r.ms < ms).length + 1;
+    lastFinish = { runner: state.runner, slug: p.slug, ms };
     window.__trpShareData = {
       mode: "crono",
       runner: state.runner,
+      rank,
       timeMs: ms,
       placeName: p.nombre,
       startName: p.partida.nombre,
@@ -364,20 +396,12 @@
     $("crBtnAbort").disabled = true;
     $("crBtnPocket").disabled = true;
 
-    const top = TRPRanking.cronoByPlace(p.slug).slice(0, 5);
     $("metaTitle").innerHTML = `¡META!<br>${esc(p.nombre).toUpperCase()}`;
     $("metaSummary").innerHTML =
       `<strong class="runner-tag">${esc(state.runner)}</strong><br><br>` +
       `Trek desde <strong>${esc(p.partida.nombre)}</strong><br>` +
       `Tiempo: <strong class="mono">${TRP.formatMs(ms)}</strong>${how === "auto" ? " <small>(auto 📡)</small>" : ""}`;
-    $("metaTable").innerHTML =
-      `<thead><tr><th>#</th><th>Trekker</th><th>Tiempo</th><th>Fecha</th></tr></thead><tbody>` +
-      top.map((r, i) => `<tr class="rank-${i + 1}">
-        <td><span class="pos">${i + 1}</span></td>
-        <td><strong>${esc(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
-        <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
-        <td class="mono">${r.date || "—"}</td></tr>`).join("") +
-      `</tbody>`;
+    renderMetaTop(p);
     document.querySelector("#modalMeta .confetti-stamp").textContent = "¡Meta!";
     const mt = document.getElementById("metaTrack");
     if (mt) {
@@ -511,6 +535,32 @@
   $("crBtnFinish").addEventListener("click", () => finish("manual"));
   $("crBtnAbort").addEventListener("click", abortRace);
   $("crBtnPocket").addEventListener("click", enterPocket);
+  /* Foto del trekker para el ranking: se achica a 240 px y se guarda
+     junto a la marca recién terminada. */
+  const metaPhoto = $("metaPhotoInput");
+  if (metaPhoto) metaPhoto.addEventListener("change", function () {
+    const f = this.files && this.files[0];
+    const msg = $("metaPhotoMsg");
+    if (!f || !lastFinish) return;
+    const img = new Image();
+    const url = URL.createObjectURL(f);
+    img.onload = function () {
+      URL.revokeObjectURL(url);
+      const max = 240;
+      const sc = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(img.width * sc));
+      c.height = Math.max(1, Math.round(img.height * sc));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      const dataUrl = c.toDataURL("image/jpeg", 0.8);
+      if (TRPRanking.cronoSetPhoto(lastFinish, dataUrl)) {
+        if (msg) msg.textContent = "✔ Foto guardada. Ya aparece en tu ranking.";
+        renderMetaTop(state.place);
+      } else if (msg) msg.textContent = "⚠ No se pudo guardar la foto.";
+    };
+    img.onerror = function () { if (msg) msg.textContent = "⚠ No se pudo leer esa imagen."; };
+    img.src = url;
+  });
   (function () {
     const pm = $("pocketMode");
     if (!pm) return;

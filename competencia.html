@@ -138,6 +138,11 @@
     <div class="board mt-2" style="box-shadow:var(--shadow-sm);">
       <table><tbody id="metaTable"></tbody></table>
     </div>
+    <div class="mt-3" style="text-align:center;">
+      <label class="btn btn-ghost" for="metaPhotoInput">📸 Sube tu foto para el ranking</label>
+      <input type="file" id="metaPhotoInput" accept="image/*" hidden>
+      <p class="mono mt-2" id="metaPhotoMsg" style="font-size:.8rem;color:#666;">Tu foto aparecerá junto a tu nombre en el ranking.</p>
+    </div>
     <div class="split mt-3" style="justify-content:center;">
       <button class="btn btn-primary" id="btnShareResult">📤 Compartir resultado</button>
       <button class="btn btn-dark" id="btnDownloadResult">⬇ Descargar</button>

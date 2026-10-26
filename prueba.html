@@ -444,7 +444,10 @@
      Salida con pulsación larga (anti toques accidentales). */
   var tPocketOn = false;
   function enterTPocket() {
-    if ($("tStatus").textContent !== "Corriendo") return;
+    if ($("tStatus").textContent !== "Corriendo") {
+      if (window.TRPToast) TRPToast.show("Primero pulsa INICIAR y luego 🌙 Modo bolsillo.");
+      return;
+    }
     tPocketOn = true;
     $("pocketMode").hidden = false;
     requestWakeLock();

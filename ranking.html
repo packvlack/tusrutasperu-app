@@ -139,15 +139,22 @@
   const sel = document.getElementById("selCronoPlace");
   sel.innerHTML = TRP.PLACES.map((p, i) =>
     `<option value="${p.slug}">${String(i + 1).padStart(2, "0")} · ${p.nombre} — partida: ${p.partida.nombre}</option>`).join("");
+  function photoCell(r) {
+    if (r.photo) return `<img src="${r.photo}" alt="" style="width:2.2rem;height:2.2rem;object-fit:cover;border-radius:50%;border:2px solid #101010;vertical-align:middle;margin-right:.4rem;">`;
+    const ini = (r.runner || "?").trim().charAt(0).toUpperCase();
+    return `<span style="display:inline-block;width:2.2rem;height:2.2rem;line-height:2.2rem;text-align:center;border-radius:50%;background:var(--acid);border:2px solid #101010;font-weight:700;vertical-align:middle;margin-right:.4rem;">${TRPEscape(ini)}</span>`;
+  }
   function renderCrono() {
-    const rows = TRPRanking.cronoByPlace(sel.value);
+    const rows = TRPRanking.cronoByPlace(sel.value).slice(0, 10);
+    const total = TRPRanking.cronoByPlace(sel.value).length;
     document.getElementById("boardCrono").innerHTML = rows.length
       ? rows.map((r, i) => `<tr class="rank-${i + 1}">
           <td><span class="pos">${i + 1}</span></td>
-          <td><strong>${TRPEscape(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
+          <td>${photoCell(r)}<strong>${TRPEscape(r.runner)}</strong>${r.demo ? ' <span class="tag" style="font-size:.6rem;">demo</span>' : ""}</td>
           <td class="mono"><strong>${TRP.formatMsShort(r.ms)}</strong></td>
           <td class="mono">${r.date || "—"}</td>
-        </tr>`).join("")
+        </tr>`).join("") +
+        (total > 10 ? `<tr><td colspan="4" class="center mono" style="padding:1rem;font-size:.8rem;color:#666;">Top 10 de ${total} marcas en este lugar.</td></tr>` : "")
       : `<tr><td colspan="4" class="center" style="padding:2rem;">Sin marcas todavía. <a href="competencia.html?modo=trek&lugar=${sel.value}">Sé el primero →</a></td></tr>`;
   }
   sel.addEventListener("change", renderCrono);

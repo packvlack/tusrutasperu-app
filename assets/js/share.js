@@ -79,10 +79,10 @@
 
     // foto
     const img = await loadImg(d.img);
-    if (img) drawCover(x, img, 60, 250, W - 120, 560);
-    else { x.fillStyle = "#1c1c1c"; x.fillRect(60, 250, W - 120, 560); }
+    if (img) drawCover(x, img, 60, 250, W - 120, 520);
+    else { x.fillStyle = "#1c1c1c"; x.fillRect(60, 250, W - 120, 520); }
 
-    let y = 880;
+    let y = 840;
     // etiqueta de modo
     const tag = d.mode === "crono" ? "⏱ TREK CRONOMETRADO" : "🏁 CIRCUITO · 12 CHECKPOINTS";
     x.font = `40px ${MONO}`;
@@ -91,7 +91,7 @@
     x.fillRect(W / 2 - tw / 2, y, tw, 72);
     x.fillStyle = INK;
     x.fillText(tag, W / 2, y + 49);
-    y += 178;
+    y += 170;
 
     // lugar (1 o 2 líneas, balanceadas)
     x.fillStyle = PAPER;
@@ -113,13 +113,13 @@
       fitFont(x, ln, W - 160, i === 0 && lines.length === 1 ? 110 : 100, DISPLAY);
       x.fillText(ln, W / 2, y + i * 108);
     });
-    y += lines.length === 1 ? 130 : 240;
+    y += lines.length === 1 ? 130 : 230;
 
     if (d.startName) {
       x.fillStyle = ACID;
       x.font = `38px ${MONO}`;
       x.fillText(("DESDE " + d.startName).toUpperCase(), W / 2, y);
-      y += 80;
+      y += 70;
     }
 
     // tiempo gigante
@@ -127,14 +127,22 @@
     x.fillStyle = ACID;
     fitFont(x, t, W - 140, 185, DISPLAY);
     x.fillText(t, W / 2, y + 140);
-    y += 235;
+    y += 200;
 
     // track GPS (distancia + desnivel), si viene en los datos
     if (d.track) {
       x.fillStyle = DIM;
       x.font = `38px ${MONO}`;
       x.fillText(d.track, W / 2, y);
-      y += 64;
+      y += 56;
+    }
+
+    // puesto en el ranking del lugar (si viene en los datos)
+    if (d.rank) {
+      x.fillStyle = ACID;
+      x.font = `44px ${MONO}`;
+      x.fillText("🏆 PUESTO #" + d.rank, W / 2, y);
+      y += 56;
     }
 
     // corredor
@@ -148,13 +156,15 @@
     x.fillStyle = PAPER;
     fitFont(x, (d.runner || "").toUpperCase(), bw - 80, 64, DISPLAY);
     x.fillText((d.runner || "").toUpperCase(), W / 2, y + 104);
-    y += 200;
+    y += 170;
 
-    // fecha + origen
-    x.fillStyle = DIM;
-    x.font = `34px ${MONO}`;
-    x.fillText(`${d.date || ""} · ${SITE_URL}`, W / 2, y);
-    y += 60;
+    // fecha + origen (con guarda: nunca dentro de la zona del pie)
+    if (y < H - 130) {
+      x.fillStyle = DIM;
+      x.font = `34px ${MONO}`;
+      x.fillText(`${d.date || ""} · ${SITE_URL}`, W / 2, y);
+    }
+    y += 56;
 
     // pie (se limpia la zona antes de dibujar: anti-fantasma)
     x.fillStyle = INK;
@@ -199,7 +209,9 @@
   async function getCard() {
     const d = window.__trpShareData;
     if (!d) return null;
-    const key = [d.timeMs, d.placeName, d.runner, d.track].join("|");
+    /* Clave con TODOS los campos: una tarjeta vieja no puede salir
+       por otra ruta, otra fecha, otra foto ni otro puesto. */
+    const key = JSON.stringify(d);
     if (!lastCanvas || key !== lastKey) {
       lastCanvas = await makeCard(d);
       lastKey = key;

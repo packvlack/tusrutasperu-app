@@ -187,6 +187,20 @@
       all.push(entry);
       try { localStorage.setItem(CRONO_KEY, JSON.stringify(all)); } catch (e) {}
     },
+    /* Guarda la foto del trekker en su marca (la última que coincida
+       con runner+slug+ms: la del trek recién terminado). */
+    cronoSetPhoto(match, photo) {
+      const all = this.cronoAll();
+      for (let i = all.length - 1; i >= 0; i--) {
+        const r = all[i];
+        if (r.runner === match.runner && r.slug === match.slug && r.ms === match.ms) {
+          r.photo = photo;
+          try { localStorage.setItem(CRONO_KEY, JSON.stringify(all)); } catch (e) { return false; }
+          return true;
+        }
+      }
+      return false;
+    },
     cronoByPlace(slug) {
       return this.cronoAll()
         .filter(r => r.slug === slug && r.ms != null)
