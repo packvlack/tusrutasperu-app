@@ -143,6 +143,12 @@
 
   /* ---------- Cronómetro (sin deriva) ---------- */
   function tick() {
+    /* Si el sistema soltó el wake lock en plena carrera, recuperarlo
+       (máximo un intento cada 10 s para no spamear). */
+    if (state.racing && !state.demo && !_wakeLock && Date.now() - _wlLastTry > 10000) {
+      _wlLastTry = Date.now();
+      requestWakeLock();
+    }
     const el = Date.now() - state.startTime;
     const s = Math.floor(el / 1000);
     const p2 = (n) => String(n).padStart(2, "0");
@@ -214,6 +220,8 @@
   }
 
   var _wakeLock = null;
+  var _wlLastTry = 0;   /* último intento de wake lock (reintento cada 10 s en carrera) */
+  var _wlWarned = false; /* aviso de fallo mostrado una vez por carrera */
   function requestWakeLock() {
     try {
       if ("wakeLock" in navigator && !_wakeLock) {
@@ -225,11 +233,14 @@
     } catch (e) { wlFailed(); }
   }
   /* Si el bloqueo de pantalla falla, el celular se apagará solo y el GPS
-     se estrangula: avisar en el overlay para que la prueba diga la verdad. */
+     se estrangula: avisar en el overlay (bolsillo) o una vez por carrera. */
   function wlFailed() {
     if (state.pocket) {
       const h = $("pkHint");
       if (h) h.textContent = "⚠ Bloqueo de pantalla NO activo: el celular se apagará solo. Revisa permisos o ahorro de batería.";
+    } else if (state.racing && !_wlWarned) {
+      _wlWarned = true;
+      TRPToast.show("⚠ El celular puede bloquearse: el bloqueo de pantalla no se activó. Revisa ahorro de batería o prueba en Chrome.", 5000);
     }
   }
   /* Si el navegador suelta el wake lock (cambio de app, etc.), al volver
@@ -291,6 +302,9 @@
     state.racing = true;
     state.finished = false;
     state.startTime = Date.now();
+    _wlWarned = false;
+    _wlLastTry = 0;
+    requestWakeLock();
     if (window.TRPTrack) { TRPTrack.start(); const tl = $("crTrackLive"); if (tl) tl.innerHTML = "📏 0.00 km · ⛰️ +0 m"; }
     saveRace();
     state.timerId = setInterval(tick, 250);

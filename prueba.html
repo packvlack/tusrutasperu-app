@@ -12,9 +12,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
-<link rel="apple-touch-icon" href="assets/img/icon-192.png">
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png?v=3">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=3">
+<link rel="stylesheet" href="assets/css/style.css?v=3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
 <style>
 /* Registros estilo actividad: uniforme y legible */
@@ -185,9 +185,9 @@
   </div>
 </div>
 
-<script src="assets/js/data.js"></script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/track.js"></script>
+<script src="assets/js/data.js?v=3"></script>
+<script src="assets/js/app.js?v=3"></script>
+<script src="assets/js/track.js?v=3"></script>
 <script>
 /* MODO PRUEBA — lógica autocontenida. Datos en localStorage bajo "trp_test_runs_v1".
    v2.7: tracking GPS automático con TRPTrack (distancia, desnivel, mapa). */
@@ -210,6 +210,10 @@
   function now() { return acc + (running ? performance.now() - t0 : 0); }
   function paint() {
     $("tTime").textContent = fmt(now());
+    if (running && gpsOn && !_wakeLock && Date.now() - _wlLastTry > 10000) {
+      _wlLastTry = Date.now();
+      requestWakeLock();
+    }
     if (tPocketOn) {
       $("pkTime").textContent = $("tTime").textContent;
       if (window.TRPTrack) {
@@ -314,6 +318,7 @@
     $("tTrackLive").textContent = "📏 " + TRPTrack.fmtKm(s.km) + " km · ⛰️ +" + s.gainM + " m · 🛰️ " + s.points + " pts";
   }
   $("tBtnStart").addEventListener("click", function () {
+    _wlWarned = false; _wlLastTry = 0; requestWakeLock();
     if (!running) { t0 = performance.now(); running = true; tick = setInterval(paint, 100); trackLiveReset(); }
     setState("Corriendo");
     var r = $("tRoute").value.trim() || "Ruta de prueba";
@@ -381,6 +386,8 @@
     }
   }
   var _wakeLock = null;
+  var _wlLastTry = 0;
+  var _wlWarned = false;
   function requestWakeLock() {
     try {
       if ("wakeLock" in navigator && !_wakeLock) {
@@ -397,6 +404,9 @@
     if (tPocketOn) {
       var h = $("pkHint");
       if (h) h.textContent = "⚠ Bloqueo de pantalla NO activo: el celular se apagará solo. Revisa permisos o ahorro de batería.";
+    } else if (running && !_wlWarned) {
+      _wlWarned = true;
+      if (window.TRPToast) TRPToast.show("⚠ El celular puede bloquearse: el bloqueo de pantalla no se activó. Revisa ahorro de batería o prueba en Chrome.", 5000);
     }
   }
   function releaseWakeLock() {
