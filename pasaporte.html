@@ -213,8 +213,14 @@
       }
       x.font = "900 44px Arial Black, sans-serif";
       x.fillText(String(i + 1).padStart(2, "0"), bx + cw / 2, by + 52);
-      x.font = "700 24px Arial, sans-serif";
-      x.fillText((p.nombre.split(" ")[0] || "").toUpperCase().slice(0, 10), bx + cw / 2, by + 90);
+      /* Etiqueta distintiva: se quita solo el prefijo genérico (Catarata/Laguna)
+         y se conserva el resto (ñ, tildes y nombres compuestos). Auto-ajuste
+         de fuente para que ninguna etiqueta se corte en la celda. */
+      const label = p.nombre.replace(/^(Catarata|Laguna)\s+/i, "").toUpperCase();
+      let fs = 24;
+      x.font = `700 ${fs}px Arial, sans-serif`;
+      while (fs > 14 && x.measureText(label).width > cw - 16) { fs -= 2; x.font = `700 ${fs}px Arial, sans-serif`; }
+      x.fillText(label, bx + cw / 2, by + 90);
     });
     const ty = gy + 3 * ch + 2 * 24 + 70;
     x.fillStyle = "#f2efe6"; x.font = "700 40px Arial, sans-serif";
