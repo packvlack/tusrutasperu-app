@@ -390,6 +390,9 @@
         date: new Date().toISOString().slice(0, 10)
       });
     }
+    /* Código de conquista del lugar (si el trek marcó checkpoint; la demo no marca). */
+    const conquest = (!state.demo && trkA && trkA.verdict !== "rechazado") ? TRPRanking.treks()[p.slug] : null;
+    const conquestCode = conquest ? conquest.code : null;
     /* Puesto en el ranking del lugar (para la tarjeta exportada). */
     const rank = TRPRanking.cronoByPlace(p.slug).filter(r => r.ms < ms).length + 1;
     lastFinish = { runner: state.runner, slug: p.slug, ms };
@@ -397,6 +400,7 @@
       mode: "crono",
       runner: state.runner,
       rank,
+      code: conquestCode,
       timeMs: ms,
       placeName: p.nombre,
       startName: p.partida.nombre,
@@ -440,7 +444,8 @@
     $("metaSummary").innerHTML =
       `<strong class="runner-tag">${esc(state.runner)}</strong><br><br>` +
       `Trek desde <strong>${esc(p.partida.nombre)}</strong><br>` +
-      `Tiempo: <strong class="mono">${TRP.formatMs(ms)}</strong>${how === "auto" ? " <small>(auto 📡)</small>" : ""}`;
+      `Tiempo: <strong class="mono">${TRP.formatMs(ms)}</strong>${how === "auto" ? " <small>(auto 📡)</small>" : ""}` +
+      (conquestCode ? `<br>Código de conquista: <strong class="mono" style="color:var(--acid);">${esc(conquestCode)}</strong>` : "");
     renderMetaTop(p);
     document.querySelector("#modalMeta .confetti-stamp").textContent = "¡Meta!";
     const mt = document.getElementById("metaTrack");

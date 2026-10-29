@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pasaporte del expedicionario — TUSRUTASPERU</title>
+<meta name="description" content="Tu pasaporte de expedicionario TUSRUTASPERU: 12 sellos, uno por cada lugar conquistado, con fecha, tiempo y código de conquista. Y tu carnet descargable.">
+<link rel="canonical" href="https://tusrutasperu.com/app/pasaporte.html">
+<meta property="og:site_name" content="TUSRUTASPERU">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_PE">
+<meta property="og:url" content="https://tusrutasperu.com/app/pasaporte.html">
+<meta property="og:title" content="Pasaporte del expedicionario — TUSRUTASPERU">
+<meta property="og:description" content="Tu pasaporte de expedicionario TUSRUTASPERU: 12 sellos, uno por cada lugar conquistado, con fecha, tiempo y código de conquista.">
+<meta property="og:image" content="https://tusrutasperu.com/app/assets/img/hero-poster.webp">
+<meta property="og:image:alt" content="TUSRUTASPERU — Trekkea la ruta. Conquista Huaral.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pasaporte del expedicionario — TUSRUTASPERU">
+<meta name="twitter:description" content="Tu pasaporte de expedicionario TUSRUTASPERU: 12 sellos, uno por cada lugar conquistado, con fecha, tiempo y código de conquista.">
+<meta name="twitter:image" content="https://tusrutasperu.com/app/assets/img/hero-poster.webp">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d8ff00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png?v=5">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=5">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="https://tusrutasperu.com/"><span class="brand-mark">◈</span> TUSRUTASPERU</a>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Inicio</a>
+    <a href="lugares.html">Lugares</a>
+    <a href="circuito.html">12 Treks</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="pasaporte.html">Pasaporte</a>
+    <a href="competencia.html" class="nav-cta">Competir →</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
+</header>
+
+<section class="page-head">
+  <span class="head-index">🛂</span>
+  <div class="wrap">
+    <span class="kicker mono tag">◈ Tu colección, tu historia</span>
+    <h1 class="display-lg mt-2">PASAPORTE DEL<br><span class="text-blood">EXPEDICIONARIO.</span></h1>
+    <p class="lead">Cada trek cronometrado que completas marca un sello en tu pasaporte: fecha, tiempo y código de conquista. Completa los 12 y serás Gran Conquistador de Huaral.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:3rem;">
+  <div class="wrap" style="max-width:1000px;">
+
+    <!-- Ficha del atleta -->
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>🪪 Ficha del atleta</h3><span class="tag">En este dispositivo</span></div>
+      <div style="padding:1.4rem;">
+        <label class="mono" for="ppName" style="font-size:.8rem;color:#555;">Nombre que aparecerá en tu carnet</label>
+        <div class="split mt-2" style="gap:.8rem;justify-content:flex-start;">
+          <input id="ppName" type="text" maxlength="30" placeholder="Tu nombre de trekker"
+                 style="flex:1;min-width:180px;padding:.8rem 1rem;font-size:1rem;font-family:inherit;">
+          <button class="btn btn-dark" id="ppSave">Guardar nombre</button>
+        </div>
+        <p class="mono mt-2" style="font-size:.78rem;color:#555;" id="ppNameNote"></p>
+        <div class="mt-2">
+          <h3 class="display-sm"><span id="ppCount">0</span> de 12 sellos</h3>
+          <div style="height:14px;border:var(--border);margin-top:.8rem;background:#fff;"><div id="ppBar" style="height:100%;width:0%;background:var(--acid);"></div></div>
+          <p class="mt-2 mono" style="font-size:.8rem;color:#555;" id="ppMsg"></p>
+        </div>
+        <div id="ppConquistador" class="mt-2"></div>
+        <p class="mt-2">Tiempo total acumulado: <strong class="mono" id="ppTotal">00:00:00</strong></p>
+        <div class="split mt-2" style="gap:.8rem;justify-content:flex-start;">
+          <button class="btn btn-primary" id="ppDownload">⬇ Descargar mi carnet (PNG)</button>
+          <a href="competencia.html?modo=trek" class="btn btn-danger">Seguir conquistando →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sellos -->
+    <h2 class="display-md reveal mb-2">LOS 12 SELLOS</h2>
+    <div id="ppStamps" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;"></div>
+
+    <div class="split mt-3 reveal">
+      <a href="ranking.html" class="btn btn-dark btn-big">Ver el ranking →</a>
+      <a href="circuito.html" class="btn btn-big">Ver los 12 treks →</a>
+    </div>
+    <p class="mono mt-2" style="font-size:.75rem;color:#777;">Los sellos se guardan en tu dispositivo, igual que tus tiempos. Cada sello lleva su código de conquista, único para ese lugar y fecha.</p>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="display-sm" style="color:var(--acid);">TUSRUTASPERU</p>
+        <p class="mt-2" style="max-width:38ch;color:#bbb;">La app de competencia viajera nacida en Huaral, Perú. Trekkea la ruta, marca tu tiempo, conquista el ranking.</p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Navegación</p>
+        <p class="mt-2"><a href="index.html">Inicio</a><br><a href="lugares.html">Lugares</a><br><a href="circuito.html">12 Treks</a><br><a href="ranking.html">Ranking</a><br><a href="pasaporte.html">Pasaporte</a><br><a href="competencia.html">Competir</a></p>
+      </div>
+      <div>
+        <p class="mono" style="color:var(--acid);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;">Síguenos</p>
+        <p class="mt-2"><a href="https://www.tiktok.com/@tusrutas" target="_blank" rel="noopener">TikTok · @tusrutas</a><br><a href="https://www.facebook.com/TusRutasPeru/" target="_blank" rel="noopener">Facebook · TusRutasPeru</a><br><a href="https://tusrutasperu.com/" target="_blank" rel="noopener">tusrutasperu.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> TUSRUTASPERU · Hecho con concreto en Huaral, Perú</span>
+      <span>Temporada 01 · v2.13</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js?v=5"></script>
+<script src="assets/js/app.js?v=5"></script>
+<script>
+(function () {
+  const NAME_KEY = "trp_athlete_name";
+  const treks = TRPRanking.treks();
+  const places = TRP.PLACES;
+  const n = Object.keys(treks).length;
+  const totalMs = TRPRanking.treksTotalMs();
+
+  /* Nombre: guardado, o el del trek más reciente, o TREKKER. */
+  const latestRunner = Object.values(treks).sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))[0];
+  const savedName = localStorage.getItem(NAME_KEY) || (latestRunner && latestRunner.runner) || "";
+  const nameInput = document.getElementById("ppName");
+  nameInput.value = savedName;
+  const note = document.getElementById("ppNameNote");
+  note.textContent = savedName ? "Nombre guardado en este dispositivo." : "Escribe tu nombre para personalizar tu carnet.";
+  document.getElementById("ppSave").addEventListener("click", () => {
+    const v = nameInput.value.trim();
+    if (!v) { note.textContent = "Escribe un nombre primero."; return; }
+    localStorage.setItem(NAME_KEY, v);
+    note.textContent = "Nombre guardado. ✔";
+  });
+
+  /* Progreso */
+  document.getElementById("ppCount").textContent = n;
+  document.getElementById("ppBar").style.width = (n / 12 * 100) + "%";
+  document.getElementById("ppMsg").textContent = n === 0
+    ? "Aún no tienes sellos. Trekkea tu primer lugar y marca el primero."
+    : (n === 12 ? "¡Colección completa! Eres Gran Conquistador de Huaral. 🏆"
+                : `Te faltan ${12 - n} sellos para el título de Gran Conquistador.`);
+  document.getElementById("ppTotal").textContent = TRP.formatMs(totalMs);
+  if (n === 12) {
+    const lastDate = Object.values(treks).map(t => t.date || "").sort().pop();
+    document.getElementById("ppConquistador").innerHTML =
+      `<p class="display-sm" style="background:var(--acid);border:var(--border);padding:.8rem 1rem;">🏆 GRAN CONQUISTADOR DE HUARAL${lastDate ? ` · Último sello: ${lastDate}` : ""}</p>`;
+  }
+
+  /* Sellos */
+  document.getElementById("ppStamps").innerHTML = places.map((p, i) => {
+    const t = treks[p.slug];
+    const code = t ? (t.code || TRPRanking.conquestCode(p.slug, t.date)) : null;
+    return `
+    <article style="border:var(--border);box-shadow:var(--shadow-sm);background:#fff;overflow:hidden;">
+      <div style="position:relative;">
+        <img src="${p.img}" alt="${TRPEscape(p.alt || p.nombre)}" loading="lazy" style="width:100%;height:150px;object-fit:cover;display:block;${t ? "" : "filter:grayscale(1) opacity(.45);"}">
+        <span class="mono" style="position:absolute;top:.6rem;left:.6rem;background:${t ? "var(--acid)" : "#fff"};border:var(--border-thin);padding:.2rem .5rem;font-size:.75rem;">${t ? "✔ SELLO " + String(i + 1).padStart(2, "0") : "SELLO " + String(i + 1).padStart(2, "0") + " · PENDIENTE"}</span>
+      </div>
+      <div style="padding:1rem 1.2rem 1.2rem;">
+        <h3 style="margin:0;">${TRPEscape(p.nombre)}</h3>
+        <div class="mt-2">
+          <span class="tag">${TRPEscape(p.dificultad)}</span>
+          ${t ? `<span class="tag">${TRP.formatMsShort(t.ms)}</span>` : ""}
+        </div>
+        ${t
+          ? `<p class="mono mt-2" style="font-size:.8rem;">Fecha: ${TRPEscape(t.date || "—")}<br>Código: <strong>${TRPEscape(code)}</strong></p>
+             <p class="mono mt-2" style="font-size:.78rem;"><a href="competencia.html?modo=trek&lugar=${p.slug}">Mejorar mi tiempo →</a></p>`
+          : `<p class="mono mt-2" style="font-size:.8rem;color:#777;">Aún sin conquistar.</p>
+             <p class="mono mt-2" style="font-size:.78rem;"><a href="competencia.html?modo=trek&lugar=${p.slug}">Conquistar este lugar →</a></p>`}
+      </div>
+    </article>`;
+  }).join("");
+
+  /* Carnet PNG 1080×1080 */
+  document.getElementById("ppDownload").addEventListener("click", () => {
+    const name = (nameInput.value.trim() || localStorage.getItem(NAME_KEY) || "TREKKER").toUpperCase().slice(0, 30);
+    const c = document.createElement("canvas");
+    c.width = 1080; c.height = 1080;
+    const x = c.getContext("2d");
+    x.fillStyle = "#0a0a0a"; x.fillRect(0, 0, 1080, 1080);
+    x.strokeStyle = "#d8ff00"; x.lineWidth = 10; x.strokeRect(24, 24, 1032, 1032);
+    x.textAlign = "center";
+    x.fillStyle = "#d8ff00"; x.font = "900 64px Arial Black, sans-serif";
+    x.fillText("TUSRUTASPERU", 540, 130);
+    x.fillStyle = "#f2efe6"; x.font = "700 40px Arial, sans-serif";
+    x.fillText("PASAPORTE DEL EXPEDICIONARIO", 540, 195);
+    x.fillStyle = "#d8ff00"; x.font = "900 84px Arial Black, sans-serif";
+    x.fillText(name, 540, 300);
+    x.fillStyle = "#f2efe6"; x.font = "700 56px Arial, sans-serif";
+    x.fillText(n + " / 12 SELLOS", 540, 380);
+    /* Rejilla 4×3 de sellos */
+    const cw = 210, ch = 120, gx = 540 - (4 * cw + 3 * 24) / 2, gy = 430;
+    places.forEach((p, i) => {
+      const col = i % 4, row = Math.floor(i / 4);
+      const bx = gx + col * (cw + 24), by = gy + row * (ch + 24);
+      const t = treks[p.slug];
+      if (t) {
+        x.fillStyle = "#d8ff00"; x.fillRect(bx, by, cw, ch);
+        x.fillStyle = "#0a0a0a";
+      } else {
+        x.strokeStyle = "#555"; x.lineWidth = 3; x.strokeRect(bx, by, cw, ch);
+        x.fillStyle = "#888";
+      }
+      x.font = "900 44px Arial Black, sans-serif";
+      x.fillText(String(i + 1).padStart(2, "0"), bx + cw / 2, by + 52);
+      x.font = "700 24px Arial, sans-serif";
+      x.fillText((p.nombre.split(" ")[0] || "").toUpperCase().slice(0, 10), bx + cw / 2, by + 90);
+    });
+    const ty = gy + 3 * ch + 2 * 24 + 70;
+    x.fillStyle = "#f2efe6"; x.font = "700 40px Arial, sans-serif";
+    x.fillText("TIEMPO TOTAL: " + TRP.formatMs(totalMs), 540, ty);
+    if (n === 12) {
+      x.fillStyle = "#ff2b1f"; x.fillRect(140, ty + 30, 800, 64);
+      x.fillStyle = "#fff"; x.font = "900 36px Arial Black, sans-serif";
+      x.fillText("🏆 GRAN CONQUISTADOR DE HUARAL", 540, ty + 74);
+    }
+    x.fillStyle = "#888"; x.font = "400 30px Arial, sans-serif";
+    x.fillText("tusrutasperu.com/app", 540, 1010);
+    const a = document.createElement("a");
+    a.download = "pasaporte-tusrutasperu.png";
+    a.href = c.toDataURL("image/png");
+    a.click();
+  });
+})();
+</script>
+</body>
+</html>

@@ -24,9 +24,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
-<link rel="apple-touch-icon" href="assets/img/icon-192.png">
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png?v=5">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -39,6 +39,7 @@
     <a href="lugares.html">Lugares</a>
     <a href="circuito.html">12 Treks</a>
     <a href="ranking.html">Ranking</a>
+    <a href="pasaporte.html">Pasaporte</a>
     <a href="competencia.html" class="nav-cta">Competir →</a>
   </nav>
   <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
@@ -60,6 +61,7 @@
       <h3 class="display-sm"><span id="trekCount">0</span> de 12 treks</h3>
       <div style="height:14px;border:var(--border);margin-top:.8rem;background:#fff;"><div id="trekBar" style="height:100%;width:0%;background:var(--acid);"></div></div>
       <p class="mt-2 mono" style="font-size:.8rem;color:#555;" id="trekMsg">Trekkea tu primer lugar y marca tu primer checkpoint.</p>
+      <p class="mt-2"><a href="pasaporte.html" class="btn btn-dark">Ver mi pasaporte →</a></p>
     </div>
     <ol class="timeline" id="timeline"></ol>
     <div class="gps-panel reveal mt-3" style="border-left:12px solid var(--blood);">
@@ -119,8 +121,8 @@
   </div>
 </footer>
 
-<script src="assets/js/data.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/js/data.js?v=5"></script>
+<script src="assets/js/app.js?v=5"></script>
 <script>
 (function () {
   const tl = document.getElementById("timeline");

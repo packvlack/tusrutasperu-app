@@ -158,11 +158,12 @@
     x.fillText((d.runner || "").toUpperCase(), W / 2, y + 104);
     y += 170;
 
-    // fecha + origen (con guarda: nunca dentro de la zona del pie)
+    // fecha + código de conquista + origen (con guarda: nunca dentro de la zona del pie)
     if (y < H - 130) {
       x.fillStyle = DIM;
       x.font = `34px ${MONO}`;
-      x.fillText(`${d.date || ""} · ${SITE_URL}`, W / 2, y);
+      const dateline = d.code ? `${d.date || ""} · ${d.code} · ${SITE_URL}` : `${d.date || ""} · ${SITE_URL}`;
+      x.fillText(dateline, W / 2, y);
     }
     y += 56;
 

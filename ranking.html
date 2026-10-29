@@ -24,9 +24,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TUSRUTASPERU">
-<link rel="apple-touch-icon" href="assets/img/icon-192.png?v=4">
-<link rel="stylesheet" href="assets/fonts/fonts.css?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=4">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png?v=5">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d8ff00'/><text x='50' y='72' font-size='62' font-family='Arial Black' text-anchor='middle' fill='%23000'>T</text></svg>">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -39,6 +39,7 @@
     <a href="lugares.html">Lugares</a>
     <a href="circuito.html">12 Treks</a>
     <a href="ranking.html">Ranking</a>
+    <a href="pasaporte.html">Pasaporte</a>
     <a href="competencia.html" class="nav-cta">Competir →</a>
   </nav>
   <button class="burger" id="burger" aria-label="Abrir menú">☰</button>
@@ -73,6 +74,20 @@
         <tbody id="boardCrono"></tbody>
       </table>
       <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">El cronómetro arranca en la comunidad de partida y se detiene en el lugar. <a href="competencia.html?modo=trek">Trekkea tu trek →</a></p>
+    </div>
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>🏆 Gran Conquistador de Huaral</h3><span class="tag">12 / 12 treks</span></div>
+      <div style="padding:1.4rem;" id="boardConquistador"></div>
+    </div>
+
+    <div class="board reveal mb-2">
+      <div class="board-head"><h3>⏱ Tiempo total acumulado</h3><span class="tag">En este dispositivo</span></div>
+      <table>
+        <thead><tr><th>Lugar</th><th>Mejor tiempo</th><th>Fecha</th></tr></thead>
+        <tbody id="boardTotal"></tbody>
+      </table>
+      <p class="mono" style="padding:1rem 1.4rem;font-size:.78rem;color:#555;border-top:var(--border-thin);">Suma de tu mejor trek por lugar. <a href="pasaporte.html">Ver mi pasaporte →</a></p>
     </div>
     </div><!-- /rankLocal -->
 
@@ -122,10 +137,10 @@
   </div>
 </footer>
 
-<script src="assets/js/data.js?v=4"></script>
-<script src="assets/js/app.js?v=4"></script>
-<script src="assets/js/config.js?v=4"></script>
-<script src="assets/js/global.js?v=4"></script>
+<script src="assets/js/data.js?v=5"></script>
+<script src="assets/js/app.js?v=5"></script>
+<script src="assets/js/config.js?v=5"></script>
+<script src="assets/js/global.js?v=5"></script>
 <script>
 (function () {
   document.getElementById("btnWipe").addEventListener("click", () => {
@@ -242,6 +257,26 @@
       note2.textContent = "";
     }
   }
+  /* ----- Gran Conquistador + tiempo total (pasaporte) ----- */
+  (function renderPassportBoards() {
+    const treks = TRPRanking.treks();
+    const n = Object.keys(treks).length;
+    const totalMs = TRPRanking.treksTotalMs();
+    const box = document.getElementById("boardConquistador");
+    if (n === 12) {
+      const lastDate = Object.values(treks).map(t => t.date || "").sort().pop();
+      box.innerHTML = `<p class="display-sm">🏆 ¡GRAN CONQUISTADOR DE HUARAL!</p>
+        <p class="mt-2">Completaste los 12 treks. Tiempo total acumulado: <strong class="mono">${TRP.formatMs(totalMs)}</strong>${lastDate ? ` · Último sello: ${lastDate}` : ""}.</p>
+        <p class="mt-2"><a href="pasaporte.html" class="btn btn-primary">Ver mi pasaporte →</a></p>`;
+    } else {
+      box.innerHTML = `<p>Llevas <strong>${n}/12</strong> sellos. Te faltan ${12 - n} para el título de Gran Conquistador.</p>
+        <p class="mt-2"><a href="pasaporte.html" class="btn btn-dark">Ver mi pasaporte →</a></p>`;
+    }
+    document.getElementById("boardTotal").innerHTML = TRP.PLACES.map(p => {
+      const t = treks[p.slug];
+      return `<tr><td><strong>${TRPEscape(p.nombre)}</strong></td><td class="mono">${t ? `<strong>${TRP.formatMsShort(t.ms)}</strong>` : "—"}</td><td class="mono">${t ? (t.date || "—") : "—"}</td></tr>`;
+    }).join("") + `<tr><td><strong>TOTAL</strong></td><td class="mono"><strong>${TRP.formatMs(totalMs)}</strong></td><td class="mono">${n}/12</td></tr>`;
+  })();
 })();
 </script>
 </body>

@@ -215,14 +215,30 @@
         return (raw && typeof raw === "object") ? raw : {};
       } catch (e) { return {}; }
     },
+    /* Código de conquista determinista: TRP-XXX-0000. El mismo siempre
+       para el mismo lugar y fecha; se guarda en el trek y se conserva
+       aunque después mejores el tiempo. */
+    conquestCode(slug, dateStr) {
+      const base = (slug || "") + "|" + (dateStr || "");
+      let h = 0;
+      for (let i = 0; i < base.length; i++) h = (h * 31 + base.charCodeAt(i)) % 100000;
+      const letters = (slug || "xxx").replace(/[^a-z]/gi, "").slice(0, 3).toUpperCase().padEnd(3, "X");
+      return `TRP-${letters}-${1000 + (h % 9000)}`;
+    },
     trekDone(entry) {
       const all = this.treks();
       const prev = all[entry.slug];
+      const code = (prev && prev.code) || entry.code || this.conquestCode(entry.slug, entry.date);
       if (!prev || (entry.ms != null && entry.ms < prev.ms)) {
-        all[entry.slug] = { ms: entry.ms, date: entry.date, runner: entry.runner };
+        all[entry.slug] = { ms: entry.ms, date: entry.date, runner: entry.runner, code };
+      } else if (!prev.code) {
+        prev.code = code;
       }
       try { localStorage.setItem(TREKS_KEY, JSON.stringify(all)); } catch (e) {}
       return all;
+    },
+    treksTotalMs() {
+      return Object.values(this.treks()).reduce((a, t) => a + (t.ms || 0), 0);
     },
     treksCount() { return Object.keys(this.treks()).length; }
   };
