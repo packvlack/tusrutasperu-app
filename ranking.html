@@ -240,7 +240,11 @@
       : (r.verdict === "revisar" ? ' <span class="tag" style="font-size:.6rem;background:#ffb703;">revisión</span>' : "");
     tb.innerHTML = `<tr><td colspan="4" class="center" style="padding:1.5rem;">Cargando…</td></tr>`;
     try {
-      const rows = await TRPGlobal.cronoBoard(gsel.value);
+      const allRows = await TRPGlobal.cronoBoard(gsel.value);
+      /* QA externa: las marcas demo llegaban al ranking global. Se excluyen
+         de la vista aunque existan en la base (el botón de publicar ya no
+         permite publicar un demo). */
+      const rows = allRows.filter(r => !r.demo);
       lastCronoRows = rows;
       tb.innerHTML = rows.length
         ? rows.map((r, i) => `<tr class="rank-${i + 1}">
@@ -251,7 +255,7 @@
             <td><button class="btn btn-ghost btn-small" data-rep="crono:${i}" title="Reportar tiempo sospechoso" style="padding:.2rem .5rem;">🚩</button></td></tr>`).join("")
         : `<tr><td colspan="5" class="center" style="padding:2rem;">Sin tiempos publicados en este lugar. <a href="competencia.html?modo=trek&lugar=${gsel.value}">Sé el primero →</a></td></tr>`;
       const p = TRP.place(gsel.value);
-      note2.textContent = `Global · ${p.nombre} (partida: ${p.partida.nombre}) · ${rows.length} tiempos.`;
+      note2.textContent = `Global · ${p.nombre} (partida: ${p.partida.nombre}) · ${rows.length} tiempos (sin demo).`;
     } catch (e) {
       tb.innerHTML = `<tr><td colspan="4" class="center" style="padding:2rem;">No se pudo cargar. Revisa tu conexión.</td></tr>`;
       note2.textContent = "";

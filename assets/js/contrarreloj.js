@@ -310,7 +310,8 @@
       : "🏁 Arrancar";
     if (state.racing || state.finished) return;
     let msg;
-    if (!p) msg = "Elige un lugar y acércate a su comunidad.";
+    if (!state.runner) msg = "Primero fija tu nombre de trekker arriba.";
+    else if (!p) msg = "Elige un lugar y acércate a su comunidad.";
     else if (state.demo) msg = `Modo demo: partirás simbólicamente desde ${p.partida.nombre}.`;
     else if (state.inStartZone) msg = `✔ Estás en ${p.partida.nombre}. ¡Listo para arrancar!`;
     else if (noFence) msg = `Partida sin geocerca verificada: arranque manual desde ${p.partida.nombre}.`;
@@ -426,7 +427,10 @@
     };
     const pub = document.getElementById("btnPublishGlobal");
     if (pub) {
-      if (trkA && trkA.verdict === "rechazado" && !state.demo) {
+      if (state.demo) {
+        pub.disabled = true;
+        pub.textContent = "Modo demo — no publicable en el ranking global";
+      } else if (trkA && trkA.verdict === "rechazado") {
         pub.disabled = true;
         pub.textContent = "⚠ Track inválido — no publicable";
       } else {
@@ -445,7 +449,7 @@
       `<strong class="runner-tag">${esc(state.runner)}</strong><br><br>` +
       `Trek desde <strong>${esc(p.partida.nombre)}</strong><br>` +
       `Tiempo: <strong class="mono">${TRP.formatMs(ms)}</strong>${how === "auto" ? " <small>(auto 📡)</small>" : ""}` +
-      (conquestCode ? `<br>Código de conquista: <strong class="mono" style="color:var(--acid);">${esc(conquestCode)}</strong>` : "");
+      (conquestCode ? `<br>Código de conquista: <strong class="mono" style="color:var(--acid);">${esc(conquestCode)}</strong><br><a href="pasaporte.html">🛂 Ver mi sello en el pasaporte →</a>` : "");
     renderMetaTop(p);
     document.querySelector("#modalMeta .confetti-stamp").textContent = "¡Meta!";
     const mt = document.getElementById("metaTrack");
@@ -565,6 +569,10 @@
     TRPToast.show("Trekker registrado: " + v);
   });
   $("crRunnerName").addEventListener("keydown", (e) => { if (e.key === "Enter") $("crBtnRunner").click(); });
+  /* QA externa: si el campo conserva un nombre anterior y se teclea encima,
+     el texto se anexaba y se cortaba a 16. Al enfocar se selecciona todo:
+     escribir reemplaza, no anexa. */
+  $("crRunnerName").addEventListener("focus", (e) => e.target.select());
 
   $("crBtnGps").addEventListener("click", startGps);
   $("crBtnDemo").addEventListener("click", () => {

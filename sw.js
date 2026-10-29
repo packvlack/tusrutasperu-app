@@ -14,6 +14,7 @@ const SHELL = [
   "./competencia.html",
   "./prueba.html",
   "./ranking.html",
+  "./pasaporte.html",
   "./manifest.webmanifest",
   "./assets/css/style.css",
   "./assets/fonts/fonts.css",
