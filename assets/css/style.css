@@ -486,7 +486,7 @@ h1, h2, h3, .display {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 .modal-backdrop.open { display: flex; }
 .modal {
@@ -495,23 +495,44 @@ h1, h2, h3, .display {
   box-shadow: var(--shadow-lg);
   max-width: 520px;
   width: 100%;
+  min-width: 0;
   padding: 2.2rem;
   position: relative;
   /* v2.9: el contenido largo (track + tabla + botones) hace scroll
      dentro del modal; la ✕ queda siempre visible arriba. */
-  max-height: calc(100vh - 3rem);
-  max-height: calc(100dvh - 3rem);
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
 }
 .modal-close {
-  position: absolute; top: -.9rem; right: -.9rem;
-  width: 2.6rem; height: 2.6rem;
+  /* Fix 2026-10-31: antes era absolute top:-.9rem right:-.9rem, fuera
+     de la tarjeta, cortada por arriba y se perdía al bajar dentro del
+     modal. Ahora va DENTRO, en su propia fila arriba a la derecha, y
+     con sticky queda siempre visible mientras se hace scroll. */
+  position: sticky; top: .5rem;
+  display: block; margin-left: auto;
+  width: 2.8rem; height: 2.8rem; flex-shrink: 0;
   background: var(--blood); color: #fff;
   border: var(--border);
   font-family: var(--font-display);
   font-size: 1.2rem;
   cursor: pointer;
+  z-index: 5;
+}
+/* Fix 2026-10-31: el track del modal se cortaba a la derecha en el
+   celular (la 3ª columna quedaba fuera y había que mover horizontal).
+   El board no debe forzar un ancho mayor que el modal. */
+#modalMeta .board, #metaTrack { min-width: 0; max-width: 100%; }
+#modalMeta .board-head { flex-wrap: wrap; gap: .5rem .75rem; }
+#modalMeta .board-head .tag { white-space: normal; text-align: center; }
+@media (max-width: 600px) {
+  .modal-backdrop { padding: .75rem; }
+  .modal { padding: 1.1rem .9rem; box-shadow: var(--shadow-sm); }
+  .modal-close { top: .25rem; }
+  #modalMeta .board-head { padding: .8rem .9rem; }
+  #modalMeta .board td, #modalMeta .board th { padding: .6rem .5rem; }
 }
 
 /* ---------- REVELADO POR SCROLL ---------- */
