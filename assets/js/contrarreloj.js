@@ -461,8 +461,11 @@
              ${(() => {
                const kmT = trkA && trkA.km ? trkA.km : trk.km;
                const ritmo = kmT >= 0.05 ? Math.floor(ms / kmT / 60000) + ":" + String(Math.floor(ms / kmT / 1000) % 60).padStart(2, "0") + " /km" : "—";
-               const cell = (v, l) => `<div style="border:2px solid #101010;padding:.5rem .25rem;text-align:center;"><strong style="display:block;font-size:1.15rem;line-height:1.1;">${v}</strong><small style="font-size:.62rem;letter-spacing:.08em;color:#666;">${l}</small></div>`;
-               return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem;">
+               /* Fix 2026-10-31: minmax(0,1fr) + min-width:0 para que los
+                  valores sin espacios ("00:33:13", "19.1 km/h") no empujen
+                  la 3ª columna fuera del modal en el celular. */
+               const cell = (v, l) => `<div style="border:2px solid #101010;padding:.45rem .2rem;text-align:center;min-width:0;overflow-wrap:anywhere;"><strong style="display:block;font-size:clamp(.92rem,4.2vw,1.15rem);line-height:1.1;">${v}</strong><small style="font-size:.62rem;letter-spacing:.08em;color:#666;">${l}</small></div>`;
+               return `<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-top:1rem;">
                  ${cell(TRPTrack.fmtKm(kmT) + " km", "DISTANCIA")}
                  ${cell(TRP.formatMs(ms), "TIEMPO")}
                  ${cell(ritmo, "RITMO MEDIO")}
